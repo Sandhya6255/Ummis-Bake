@@ -10,7 +10,7 @@ import logo from '../../assets/images/Logo/LOGO.jpg';
 // ================================|| LOGIN ||================================ //
 
 const Login = () => (
-  <Box sx={{ justifyContent: 'center'}}>
+  <Box sx={{ display:'flex', justifyContent: 'center'}}>
     <Card sx={{
       padding:{xs:3, md:3},
       maxWidth: { xs: 400, lg: 475},

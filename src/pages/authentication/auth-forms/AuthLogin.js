@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import axios from 'axios';
 
 // material-ui
 import {
@@ -43,8 +44,28 @@ const AuthLogin = () => {
     event.preventDefault();
   };
 
+  //Submit login
+  const Submitlogin = () =>
+  {
+
+    var username = document.getElementById("email-login").value;
+    var password = document.getElementById("password-login").value;
+
+    var data= {
+      username: username,
+      password: password
+    }
+
+    if(username!=""&&password!="")
+    {
+      axios.post('http://localhost:5000/user/login/',{data})
+      .then(res => {
+        console.log(res)
+      })
+    }
+  }
+
   return (
-    <div style={{ display:'flex', justifyContent:'center' }}>
       <Formik
         initialValues={{
           email: '',
@@ -97,7 +118,7 @@ const AuthLogin = () => {
                   <OutlinedInput
                     fullWidth
                     error={Boolean(touched.password && errors.password)}
-                    id="-password-login"
+                    id="password-login"
                     type={showPassword ? 'text' : 'password'}
                     value={values.password}
                     name="password"
@@ -152,7 +173,8 @@ const AuthLogin = () => {
               )}
               <Grid item xs={12}>
                 <AnimateButton>
-                  <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="primary">
+                  <Button disableElevation disabled={isSubmitting} fullWidth size="large" 
+                  type="submit" variant="contained" color="primary" onClick={Submitlogin}>
                     Login
                   </Button>
                 </AnimateButton>
@@ -169,7 +191,6 @@ const AuthLogin = () => {
           </form>
         )}
       </Formik>
-    </div>
   );
 };
 
