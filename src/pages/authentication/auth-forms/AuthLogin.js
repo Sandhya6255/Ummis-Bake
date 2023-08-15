@@ -58,7 +58,7 @@ const AuthLogin = () => {
 
     if(username!=""&&password!="")
     {
-      axios.post('http://localhost:5000/user/login/',{data})
+      axios.post('http://internal-api.ummiscakehouse.com/user/login/',{data})
       .then(res => {
         console.log(res)
       })

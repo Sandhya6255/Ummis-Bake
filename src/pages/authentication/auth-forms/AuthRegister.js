@@ -76,7 +76,7 @@ const AuthRegister = () => {
   
       if(firstname!=""&&lastname!=""&&address!=""&&email!=""&&password!="")
       {
-        axios.post('http://localhost:5000/user/create/',{data})
+        axios.post('http://internal-api.ummiscakehouse.com/user/create/',{data})
         .then(res => {
           console.log(res)
         })
