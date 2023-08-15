@@ -1,6 +1,6 @@
 {
-  "name": "ummis Bake",
-  "version": "1.1.2",
+  "name": "ummisBake",
+  "license": "UNLICENSED",
   "private": true,
   "homepage": "/",
   "dependencies": {
@@ -12,6 +12,7 @@
     "@mui/icons-material": "^5.14.1",
     "@mui/lab": "^5.0.0-alpha.100",
     "@mui/material": "^5.10.6",
+    "@mui/x-date-pickers": "^6.11.1",
     "@reduxjs/toolkit": "^1.8.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

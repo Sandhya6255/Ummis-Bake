@@ -17,6 +17,9 @@ import {
   Stack,
   Typography
 } from '@mui/material';
+// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 // third party
 import * as Yup from 'yup';
@@ -29,6 +32,7 @@ import { strengthColor, strengthIndicator } from 'utils/password-strength';
 
 // assets
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
+// import { doc } from 'prettier';
 
 // ============================|| FIREBASE - REGISTER ||============================ //
 
@@ -51,6 +55,33 @@ const AuthRegister = () => {
   useEffect(() => {
     changePassword('');
   }, []);
+
+
+    //Submit user details
+    const AddEmployee = () =>
+    {
+      var firstname = document.getElementById("firstname-signup").value;
+      var lastname = document.getElementById("lastname-signup").value;
+      var address = document.getElementById("address-signup").value;
+      var email = document.getElementById("email-login").value;
+      var password = document.getElementById("password-signup").value;
+  
+      var data= {
+        firstname: firstname,
+        lastname:lastname,
+        address:address,
+        email:email,
+        password: password
+      }
+  
+      if(firstname!=""&&lastname!=""&&address!=""&&email!=""&&password!="")
+      {
+        axios.post('http://localhost:5000/user/create/',{data})
+        .then(res => {
+          console.log(res)
+        })
+      }
+    }
 
   return (
     <>
@@ -75,7 +106,6 @@ const AuthRegister = () => {
             setStatus({ success: false });
             setSubmitting(false);
           } catch (err) {
-            console.error(err);
             setStatus({ success: false });
             setErrors({ submit: err.message });
             setSubmitting(false);
@@ -90,7 +120,7 @@ const AuthRegister = () => {
                 <Stack spacing={1}>
                   <InputLabel htmlFor="firstname-signup">First Name*</InputLabel>
                   <OutlinedInput
-                    id="firstname-login"
+                    id="firstname-signup"
                     type="firstname"
                     value={values.firstname}
                     name="firstname"
@@ -129,7 +159,28 @@ const AuthRegister = () => {
                   )}
                 </Stack>
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} md={6}>
+                <Stack spacing={1}>
+                  <InputLabel htmlFor="datejoined-signup">Date Joined</InputLabel>
+                  <OutlinedInput
+                    fullWidth
+                    error={Boolean(touched.datejoined && errors.datejoined)}
+                    id="datejoined-signup"
+                    value={values.datejoined}
+                    name="address"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    placeholder=""
+                    inputProps={{}}
+                  />
+                  {touched.datejoined && errors.datejoined && (
+                    <FormHelperText error id="helper-text-datejoined-signup">
+                      {errors.datejoined}
+                    </FormHelperText>
+                  )}
+                </Stack>
+              </Grid>
+              <Grid item xs={12} md={6}>
                 <Stack spacing={1}>
                   <InputLabel htmlFor="address-signup">Address</InputLabel>
                   <OutlinedInput
@@ -241,7 +292,9 @@ const AuthRegister = () => {
               )}
               <Grid item xs={12}>
                 <AnimateButton>
-                  <Button disableElevation disabled={isSubmitting} size="medium" style={{margin: '0 auto', display: "flex"}} type="submit" variant="contained" color="primary">
+                  <Button disableElevation disabled={isSubmitting} size="medium" 
+                  style={{margin: '0 auto', display: "flex"}} type="submit" 
+                  variant="contained" color="primary" onClick={AddEmployee}>
                     Create Account
                   </Button>
                 </AnimateButton>

@@ -2,9 +2,11 @@
 
 // material-ui
 import { Grid, Stack, Typography } from '@mui/material';
+// import { Nav } from 'react-bootstrap';
+
 
 // project import
-import FirebaseRegister from './auth-forms/AuthRegister';
+import AuthRegister from './auth-forms/AuthRegister';
 import AuthWrapper from './AuthWrapper';
 
 // ================================|| REGISTER ||================================ //
@@ -21,7 +23,15 @@ const Register = () => (
         </Stack>
       </Grid>
       <Grid item xs={12}>
-        <FirebaseRegister />
+        {/* <div className="px-0">
+          <Nav variant="tabs" className="text-white b-0" >
+            <Nav.Link eventKey="account_details" className='d-flex justify-content-end'>Topup</Nav.Link>
+            <Nav.Link eventKey="Fiat" >Fiat Transfer</Nav.Link>
+            <Nav.Link eventKey="Crypto" >Crypto Transfer</Nav.Link>
+            <Nav.Link eventKey="Withdraw" >Bank Withdraw</Nav.Link>
+          </Nav>
+        </div> */}
+        <AuthRegister />
       </Grid>
     </Grid>
   </AuthWrapper>

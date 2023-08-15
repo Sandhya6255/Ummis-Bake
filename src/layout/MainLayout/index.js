@@ -35,14 +35,18 @@ const MainLayout = () => {
   useEffect(() => {
     setOpen(!matchDownLG);
     dispatch(openDrawer({ drawerOpen: !matchDownLG }));
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matchDownLG]);
 
   useEffect(() => {
     if (open !== drawerOpen) setOpen(drawerOpen);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [drawerOpen]);
+
+
+  //Check user loggedin or not
+  useEffect(() => {
+    console.log("checking loggedin or not")
+  }, []);
+
 
   return (
     <Box sx={{ display: 'flex', width: '100%' }}>
