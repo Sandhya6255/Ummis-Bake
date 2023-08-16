@@ -3,13 +3,15 @@ import {
     AntDesignOutlined,
     HistoryOutlined ,
     MoneyCollectOutlined,
+    TeamOutlined,
   } from '@ant-design/icons';
   
   // icons
   const icons = {
     HistoryOutlined,
     AntDesignOutlined,
-    MoneyCollectOutlined
+    MoneyCollectOutlined,
+    TeamOutlined,
   };
   
   // ==============================|| MENU ITEMS - UTILITIES ||============================== //
@@ -31,8 +33,16 @@ import {
         id: 'sales-reports',
         title: 'Sales Report',
         type: 'item',
-        url: '/salesreports',
+        url: '/salesdetails',
         icon: icons.HistoryOutlined,
+        breadcrumbs: false
+      },
+      {
+        id: 'customer-reports',
+        title: 'Customer Report',
+        type: 'item',
+        url: '/customerdetails',
+        icon: icons.TeamOutlined,
         breadcrumbs: false
       },
     ]

@@ -3,15 +3,15 @@ import { lazy } from 'react';
 // project import
 import Loadable from 'components/Loadable';
 import MainLayout from 'layout/MainLayout';
-// import AuthLogin from 'pages/authentication/auth-forms/AuthLogin';
+import AuthLogin from 'pages/authentication/auth-forms/AuthLogin';
 
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 
 // render - utilities
-const AddFranchise = Loadable(lazy(() => import('pages/authentication/auth-forms/AuthRegister')));
-const AddProduct = Loadable(lazy(() => import('pages/components-overview/ProductEntry')));
-const Productreports = Loadable(lazy(() => import('pages/components-overview/ProductReports')));
+const AddFranchise = Loadable(lazy(() => import('pages/authentication/auth-forms/AddFranchise')));
+const AddProduct = Loadable(lazy(() => import('pages/components-overview/AddProduct')));
+const Productreports = Loadable(lazy(() => import('pages/components-overview/ProductReport')));
 const Salesreports = Loadable(lazy(() => import('pages/components-overview/SalesReports')));
 const AddSales = Loadable(lazy(() => import('pages/components-overview/AddSales')));
 const AddInventory = Loadable(lazy(() => import('pages/components-overview/AddInventory')));
@@ -27,16 +27,17 @@ const MainRoutes = {
       element: <DashboardDefault />
     },
     {
-      path: 'dashboard',
-      children: [
-        {
-          path: 'default',
-          element: <DashboardDefault />
-        }
-      ]
+      path: 'login',
+      element: <AuthLogin />
+      // children: [
+      //   {
+      //     path: 'default',
+      //     element: <DashboardDefault />
+      //   }
+      // ]
     },
     {
-      path: 'adduser',
+      path: 'addfranchise',
       element: <AddFranchise />
     },
     {

@@ -47,7 +47,6 @@ const AuthLogin = () => {
   //Submit login
   const Submitlogin = () =>
   {
-
     var username = document.getElementById("email-login").value;
     var password = document.getElementById("password-login").value;
 
@@ -62,7 +61,7 @@ const AuthLogin = () => {
       axios.post('http://api.ummiscakehouse.in/api/user/login/',{data})
       .then(res => {
         console.log(res,"login response");
-      })
+      });
     }
   }
 

@@ -6,7 +6,7 @@ import { Grid, Stack, Typography } from '@mui/material';
 
 
 // project import
-import AuthRegister from './auth-forms/AuthRegister';
+import AddFranchise from './auth-forms/AddFranchise';
 import AuthWrapper from './AuthWrapper';
 
 // ================================|| REGISTER ||================================ //
@@ -31,7 +31,7 @@ const Register = () => (
             <Nav.Link eventKey="Withdraw" >Bank Withdraw</Nav.Link>
           </Nav>
         </div> */}
-        <AuthRegister />
+        <AddFranchise />
       </Grid>
     </Grid>
   </AuthWrapper>

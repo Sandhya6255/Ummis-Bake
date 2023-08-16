@@ -37,7 +37,7 @@ import {
         id: 'add-employee',
         title: 'Franchise',
         type: 'item',
-        url: '/adduser',
+        url: '/addfranchise',
         icon: icons.UserAddOutlined,
         breadcrumbs: false
       },
@@ -48,15 +48,7 @@ import {
         url: '/addinventory',
         icon: icons.StockOutlined,
         breadcrumbs: false
-      },
-      {
-        id: 'product-reports',
-        title: 'Product Report',
-        type: 'item',
-        url: '/productreports',
-        icon: icons.AppstoreAddOutlined,
-        breadcrumbs: false
-      },
+      }
     ]
   };
   
