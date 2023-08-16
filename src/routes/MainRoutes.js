@@ -9,12 +9,12 @@ import MainLayout from 'layout/MainLayout';
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 
 // render - utilities
-const AddEmployee = Loadable(lazy(() => import('pages/components-overview/AddEmployee')));
-const AddProduct = Loadable(lazy(() => import('pages/components-overview/AddProduct')));
+const AddFranchise = Loadable(lazy(() => import('pages/authentication/auth-forms/AuthRegister')));
+const AddProduct = Loadable(lazy(() => import('pages/components-overview/ProductEntry')));
 const Productreports = Loadable(lazy(() => import('pages/components-overview/ProductReports')));
 const Salesreports = Loadable(lazy(() => import('pages/components-overview/SalesReports')));
 const AddSales = Loadable(lazy(() => import('pages/components-overview/AddSales')));
-
+const AddInventory = Loadable(lazy(() => import('pages/components-overview/AddInventory')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -37,11 +37,15 @@ const MainRoutes = {
     },
     {
       path: 'adduser',
-      element: <AddEmployee />
+      element: <AddFranchise />
     },
     {
       path: 'addproduct',
       element: <AddProduct />
+    },
+    {
+      path: 'addinventory',
+      element: <AddInventory />
     },
     {
       path: 'productreports',

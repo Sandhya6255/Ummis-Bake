@@ -4,7 +4,8 @@ import {
     UserAddOutlined,
     BgColorsOutlined,
     AppstoreAddOutlined,
-    LoadingOutlined
+    LoadingOutlined,
+    StockOutlined
   } from '@ant-design/icons';
   
   // icons
@@ -13,7 +14,8 @@ import {
     UserAddOutlined,
     AntDesignOutlined,
     LoadingOutlined,
-    AppstoreAddOutlined
+    AppstoreAddOutlined,
+    StockOutlined
   };
   
   // ==============================|| MENU ITEMS - UTILITIES ||============================== //
@@ -33,10 +35,18 @@ import {
       },
       {
         id: 'add-employee',
-        title: 'Employees',
+        title: 'Franchise',
         type: 'item',
         url: '/adduser',
         icon: icons.UserAddOutlined,
+        breadcrumbs: false
+      },
+      {
+        id: 'add-inventory',
+        title: 'Inventory',
+        type: 'item',
+        url: '/addinventory',
+        icon: icons.StockOutlined,
         breadcrumbs: false
       },
       {

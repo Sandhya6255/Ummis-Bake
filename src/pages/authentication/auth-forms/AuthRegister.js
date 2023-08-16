@@ -114,7 +114,8 @@ const AuthRegister = () => {
       >
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
-            <Typography style={{marginBottom:"13px"}}><b>Add user</b></Typography>
+            <InputLabel htmlFor="inventory-details"><b>ADD FRANCHISE DETAILS</b></InputLabel>
+            <br />
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
                 <Stack spacing={1}>

@@ -9,7 +9,7 @@ import {
     InputLabel,
     OutlinedInput,
     Stack,
-    Typography
+    // Typography
 } from '@mui/material';
 // import CameraOutlined from '@ant-design/icons';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
@@ -72,7 +72,8 @@ const ProductEntry = () => {
             >
                 {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                     <form noValidate onSubmit={handleSubmit}>
-                        <Typography style={{ marginBottom: "13px" }}><b>Add product</b></Typography>
+                        <InputLabel htmlFor="product-details"><b>ADD PRODUCT DETAILS</b></InputLabel>
+                        <br />
                         <Grid container spacing={3}>
                             <Grid item xs={12} md={6}>
                                 <Stack spacing={1}>
