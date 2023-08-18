@@ -1,5 +1,6 @@
 import React from 'react';
 import $ from 'jquery';
+import { InputLabel } from '@mui/material';
 
 //third-party
 import axios from 'axios';
@@ -8,9 +9,9 @@ import "react-phone-number-input/style.css";
 
 //project import
 import url from 'routes/url';
-import secureLocalStorage from 'react-secure-storage';
+import AuthWrapper from 'pages/authentication/AuthWrapper';
 
-export default function ProductReport() {
+export default function CustomerReport() {
   $.DataTable = require('datatables.net');
   React.useEffect(() => {
     $.fn.dataTableExt.sErrMode = 'none';
@@ -19,22 +20,23 @@ export default function ProductReport() {
     });
     $('#tbl_products').DataTable({
       columnDefs: [
-    
         {
-          targets: 10,
+          targets: 0,
+          className: 'dt-control',
+          orderable: false,
           visible: false
-        }]
+        },
+        {
+          targets: 7,
+          visible: false
+        }
+      ]
     });
     getallreports();
   }, []);
 
   function getallreports() {
-    let table = $('#tbl_products').DataTable({
-      columnDefs:[ {
-        targets: 10,
-        visible: false
-      }]
-    });
+    let table = $('#tbl_products').DataTable();
 
     /* Formatting function for row details - modify as you need */
     function format(d) {
@@ -64,8 +66,9 @@ export default function ProductReport() {
     });
 
     //Get all product lists
-    axios.get(url.productlist)
-      .then(function (response) {   
+    axios.get(url.customerlist)
+      .then(function (response) {
+        console.log(response,"customer report")
         if (response.status == 200) {
           table.clear();
           for (let i = 0; i < response.data.results.length; i++) {
@@ -82,39 +85,28 @@ export default function ProductReport() {
             }
             else {
               img = '<img src=' + response.data.results[i].product_image + ' height="150" width="150" alt="product_image" />';
-            }        
+            }
 
-            var btn = '<div><button class="btn btn-sm btn-primary edit mx-1"'+
-            'id=' + response.data.results[i].id +'>Edit</button>' +
+            var btn = '<div><button class="btn btn-sm btn-primary edit mx-1" id=' + response.data.results[i].id + '>Edit</button>' +
               '<button class="btn btn-sm btn-danger delete mx-1" id=' + response.data.results[i].id + '>Delete</button></div>'
 
             table.row.add(
               [
-                // '',
+                '',
                 response.data.results[i].id,
                 response.data.results[i].name,
-                response.data.results[i].company,
                 response.data.results[i].description,
                 response.data.results[i].price,
-                response.data.results[i].category,
                 img,
                 created_at,
                 updated_at,
-                btn,
-                response.data.results[i].product_image,
+                btn
               ]
             );
 
-            //edit list
-            $('#tbl_products tbody').on('click', 'tr', function () {
-              // let string = JSON.string(data);
-              secureLocalStorage.setItem("ED_", table.row( $(this) ).data());
-              window.location.href="/editproduct"
-            });
-
             //delete list
             $('#tbl_products tbody').on('click', '.delete', function () {
-              axios.delete(url.addproduct + $(this)[0].id)
+              axios.delete(url.delproduct + $(this)[0].id)
                 .then(function (response) {
                   if (response.status == 200) {
                     $(".modal-body").html("<p class=text-danger>Product item deleted.</p>");
@@ -188,28 +180,27 @@ export default function ProductReport() {
   }
 
   return (
-    <>
+    <AuthWrapper>
+      <InputLabel htmlFor="product-details"><b>CUSTOMER LIST</b></InputLabel>
+      <br />
       <div className="table-responsive mb-3">
         <table className="table nowrap w-100" id="tbl_products">
           <thead>
             <tr className='text-left'>
-              {/* <th></th> */}
+              <th></th>
               <th>ID</th>
               <th>Product name</th>
-              <th>Company name</th>
               <th>Description</th>
               <th>Price</th>
-              <th>Category</th>
               <th>Image</th>
               <th>Created at</th>
               <th>Updated at</th>
               <th>Action</th>
-              <th></th>
             </tr>
           </thead>
           <tbody></tbody>
         </table>
       </div>
-    </>
+    </AuthWrapper>
   )
 }

@@ -33,7 +33,7 @@ import {
         id: 'sales-reports',
         title: 'Sales Report',
         type: 'item',
-        url: '/salesdetails',
+        url: '/salesreport',
         icon: icons.HistoryOutlined,
         breadcrumbs: false
       },
@@ -41,7 +41,7 @@ import {
         id: 'customer-reports',
         title: 'Customer Report',
         type: 'item',
-        url: '/customerdetails',
+        url: '/customer_report',
         icon: icons.TeamOutlined,
         breadcrumbs: false
       },

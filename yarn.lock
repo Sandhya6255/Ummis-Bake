@@ -3609,7 +3609,7 @@ cjs-module-lexer@^1.0.0:
   resolved "https://registry.npmjs.org/cjs-module-lexer/-/cjs-module-lexer-1.2.2.tgz"
   integrity sha512-cOU9usZw8/dXIXKtwa8pM0OTJQuJkxMN6w30csNRUerHfeQ5R6U3kkU/FtJeIf3M202OHfY2U8ccInBG7/xogA==
 
-classnames@^2.2.6, classnames@^2.3.2:
+classnames@^2.2.6, classnames@^2.3.1, classnames@^2.3.2:
   version "2.3.2"
   resolved "https://registry.npmjs.org/classnames/-/classnames-2.3.2.tgz"
   integrity sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==
@@ -3853,6 +3853,11 @@ cosmiconfig@^7.0.0:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
+country-flag-icons@^1.5.4:
+  version "1.5.7"
+  resolved "https://registry.npmjs.org/country-flag-icons/-/country-flag-icons-1.5.7.tgz"
+  integrity sha512-AdvXhMcmSp7nBSkpGfW4qR/luAdRUutJqya9PuwRbsBzuoknThfultbv7Ib6fWsHXC43Es/4QJ8gzQQdBNm75A==
+
 cross-spawn@^7.0.2, cross-spawn@^7.0.3:
   version "7.0.3"
   resolved "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.3.tgz"
@@ -3861,6 +3866,11 @@ cross-spawn@^7.0.2, cross-spawn@^7.0.3:
     path-key "^3.1.0"
     shebang-command "^2.0.0"
     which "^2.0.1"
+
+crypto-js@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.npmjs.org/crypto-js/-/crypto-js-4.1.1.tgz"
+  integrity sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==
 
 crypto-random-string@^2.0.0:
   version "2.0.0"
@@ -4083,6 +4093,63 @@ data-urls@^2.0.0:
     abab "^2.0.3"
     whatwg-mimetype "^2.3.0"
     whatwg-url "^8.0.0"
+
+datatables.net-bs@>=1.13.4:
+  version "1.13.6"
+  resolved "https://registry.npmjs.org/datatables.net-bs/-/datatables.net-bs-1.13.6.tgz"
+  integrity sha512-ohESuDtcrrNH56vGTErMUQklkzOVvKC5wyuaDApMruYc542IvESfalMOWKOChcAhGkhyXP9P9ZEr0AaDqQ7+Qw==
+  dependencies:
+    datatables.net ">=1.13.4"
+    jquery ">=1.7"
+
+datatables.net-buttons-bs@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.npmjs.org/datatables.net-buttons-bs/-/datatables.net-buttons-bs-2.4.1.tgz"
+  integrity sha512-7UrFP4Hez0FpRKYkRJJOr9hIZUhr2PnwvcCKr3FRyzdlz3ntViMJbZZv+L97YmNeiRAom7gmnO1Nt9eAYtxuiw==
+  dependencies:
+    datatables.net-bs ">=1.13.4"
+    datatables.net-buttons ">=2.3.6"
+    jquery ">=1.7"
+
+datatables.net-buttons@>=2.3.6:
+  version "2.4.1"
+  resolved "https://registry.npmjs.org/datatables.net-buttons/-/datatables.net-buttons-2.4.1.tgz"
+  integrity sha512-Z788xsbGW+YqJWgQYCzE5IsbY8MNIihhDP/LOefijEn7MM1/jf4sQdf/KRNHr/CWTFGfojGPz+GNdJh8appeQQ==
+  dependencies:
+    datatables.net ">=1.13.4"
+    jquery ">=1.7"
+
+datatables.net-dt@^1.13.6, datatables.net-dt@>=1.13.4:
+  version "1.13.6"
+  resolved "https://registry.npmjs.org/datatables.net-dt/-/datatables.net-dt-1.13.6.tgz"
+  integrity sha512-0fBsUi8k5e+x5e+xA/Eb5stFr2PIkHgDnbhZs8ZDLvzzL975lCm6sqBAcsTsXKvF7yuBvaDTVBTF4wOMw7PrYw==
+  dependencies:
+    datatables.net ">=1.13.4"
+    jquery ">=1.7"
+
+datatables.net-responsive-dt@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.npmjs.org/datatables.net-responsive-dt/-/datatables.net-responsive-dt-2.5.0.tgz"
+  integrity sha512-u0oHqG1LLrFj+cBVYpyOO03nECUJJim4EovKhdQtB2g8X0fbH7jWvLAOdDFvyIzktCYWScObqR8uUEtm6J9O6Q==
+  dependencies:
+    datatables.net-dt ">=1.13.4"
+    datatables.net-responsive ">=2.4.1"
+    jquery ">=1.7"
+
+datatables.net-responsive@^2.5.0, datatables.net-responsive@>=2.4.1:
+  version "2.5.0"
+  resolved "https://registry.npmjs.org/datatables.net-responsive/-/datatables.net-responsive-2.5.0.tgz"
+  integrity sha512-GL7DFiRl5qqrp5ql54Psz92xTGPR0rMcrO3hzNxMfvcfpRGL5zFNTvMpTUh59Erm6u1+KoX+j+Ig1ZD3r0iFsA==
+  dependencies:
+    datatables.net ">=1.13.4"
+    jquery ">=1.7"
+
+datatables.net@^1.13.6, datatables.net@>=1.13.4:
+  version "1.13.6"
+  resolved "https://registry.npmjs.org/datatables.net/-/datatables.net-1.13.6.tgz"
+  integrity sha512-rHNcnW+yEP9me82/KmRcid5eKrqPqW3+I/p1TwqCW3c/7GRYYkDyF6aJQOQ9DNS/pw+nyr4BVpjyJ3yoZXiFPg==
+  dependencies:
+    jquery ">=1.7"
 
 debug@^2.6.0:
   version "2.6.9"
@@ -5757,6 +5824,13 @@ ini@^1.3.5:
   resolved "https://registry.npmjs.org/ini/-/ini-1.3.8.tgz"
   integrity sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==
 
+input-format@^0.3.8:
+  version "0.3.8"
+  resolved "https://registry.npmjs.org/input-format/-/input-format-0.3.8.tgz"
+  integrity sha512-tLR0XRig1xIcG1PtIpMd/uoltvkAI62CN9OIbtj4/tEJAkqTCQLNHUZ9N4M46w0dopny7Rlt/lRH5Xzp7e6F+g==
+  dependencies:
+    prop-types "^15.8.1"
+
 internal-slot@^1.0.3, internal-slot@^1.0.4, internal-slot@^1.0.5:
   version "1.0.5"
   resolved "https://registry.npmjs.org/internal-slot/-/internal-slot-1.0.5.tgz"
@@ -6646,6 +6720,11 @@ jiti@^1.18.2:
   resolved "https://registry.npmjs.org/jiti/-/jiti-1.18.2.tgz"
   integrity sha512-QAdOptna2NYiSSpv0O/BwoHBSmz4YhpzJHyi+fnMRTXFjp7B8i/YG5Z8IfusxB1ufjcD2Sre1F3R+nX3fvy7gg==
 
+jquery@^3.7.0, jquery@>=1.7:
+  version "3.7.0"
+  resolved "https://registry.npmjs.org/jquery/-/jquery-3.7.0.tgz"
+  integrity sha512-umpJ0/k8X0MvD1ds0P9SfowREz2LenHsQaxSohMZ5OMNEU2r0tf8pdeEFTHMFxWVxKNyU9rTtK3CWzUCTKJUeQ==
+
 js-sdsl@^4.1.4:
   version "4.4.0"
   resolved "https://registry.npmjs.org/js-sdsl/-/js-sdsl-4.4.0.tgz"
@@ -6833,6 +6912,11 @@ levn@~0.3.0:
   dependencies:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
+
+libphonenumber-js@^1.10.39:
+  version "1.10.41"
+  resolved "https://registry.npmjs.org/libphonenumber-js/-/libphonenumber-js-1.10.41.tgz"
+  integrity sha512-4rmmF4u4vD3eGNuuCGjCPwRwO+fIuu1WWcS7VwbPTiMFkJd8F02v8o5pY5tlYuMR+xOvJ88mtOHpkm0Tnu2LcQ==
 
 lilconfig@^2.0.3, lilconfig@^2.0.5, lilconfig@^2.1.0:
   version "2.1.0"
@@ -7129,6 +7213,11 @@ multicast-dns@^7.2.5:
   dependencies:
     dns-packet "^5.2.2"
     thunky "^1.0.2"
+
+murmurhash-js@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/murmurhash-js/-/murmurhash-js-1.0.0.tgz"
+  integrity sha512-TvmkNhkv8yct0SVBSy+o8wYzXjE4Zz3PCesbfs8HiCXXdcTuocApFv11UWlNFWKYsP2okqrhb7JNlSm9InBhIw==
 
 mz@^2.7.0:
   version "2.7.0"
@@ -8512,6 +8601,17 @@ react-perfect-scrollbar@^1.5.8:
     perfect-scrollbar "^1.5.0"
     prop-types "^15.6.1"
 
+react-phone-number-input@^3.3.2:
+  version "3.3.2"
+  resolved "https://registry.npmjs.org/react-phone-number-input/-/react-phone-number-input-3.3.2.tgz"
+  integrity sha512-h/XdyBlmy9DApKqSbmXvvvJYL1nxA3omUsCc1aeeXkt63k2QJs971jE8T/ItV9vgljBLL36BEuKs0pZlJflGew==
+  dependencies:
+    classnames "^2.3.1"
+    country-flag-icons "^1.5.4"
+    input-format "^0.3.8"
+    libphonenumber-js "^1.10.39"
+    prop-types "^15.8.1"
+
 "react-redux@^7.2.1 || ^8.0.2", react-redux@^8.0.4:
   version "8.0.5"
   resolved "https://registry.npmjs.org/react-redux/-/react-redux-8.0.5.tgz"
@@ -8598,6 +8698,14 @@ react-scripts@^5.0.1:
     workbox-webpack-plugin "^6.4.1"
   optionalDependencies:
     fsevents "^2.3.2"
+
+react-secure-storage@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.npmjs.org/react-secure-storage/-/react-secure-storage-1.3.0.tgz"
+  integrity sha512-0878T4S7MBEjrdOuB1/Hh7F9+OTpyXPm6zhBfjRl/W3UbPdp9uVduxjTgvzJAxzU0Wfp5IfLBYW5EbSCYzoKqg==
+  dependencies:
+    crypto-js "^4.1.1"
+    murmurhash-js "^1.0.0"
 
 react-syntax-highlighter@^15.5.0:
   version "15.5.0"

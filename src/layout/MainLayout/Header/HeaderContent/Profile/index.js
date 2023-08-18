@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useRef, useState } from 'react';
+import secureLocalStorage from 'react-secure-storage';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -56,8 +57,10 @@ function a11yProps(index) {
 const Profile = () => {
   const theme = useTheme();
 
+  //logout
   const handleLogout = async () => {
-    // logout
+    secureLocalStorage.clear();
+    window.location.href="/login";
   };
 
   const anchorRef = useRef(null);
@@ -98,7 +101,7 @@ const Profile = () => {
       >
         <Stack direction="row" spacing={2} alignItems="center" sx={{ p: 0.5 }}>
           <Avatar alt="profile user" src="" sx={{ width: 32, height: 32 }} />
-          <Typography variant="subtitle1">Abdul Fathah</Typography>
+          {/* <Typography variant="subtitle1">Abdul Fathah</Typography> */}
         </Stack>
       </ButtonBase>
       <Popper
@@ -141,9 +144,9 @@ const Profile = () => {
                           <Stack direction="row" spacing={1.25} alignItems="center">
                             <Avatar alt="profile user" src="" sx={{ width: 32, height: 32 }} />
                             <Stack>
-                              <Typography variant="h6">Abdul Fathah</Typography>
+                              <Typography variant="h6">Welcome</Typography>
                               <Typography variant="body2" color="textSecondary">
-                                Admin
+                                {secureLocalStorage.getItem('un_')}
                               </Typography>
                             </Stack>
                           </Stack>

@@ -1,4 +1,7 @@
+
+import React from 'react';
 import { useState } from 'react';
+// import secureLocalStorage from 'react-secure-storage';
 
 // material-ui
 import {
@@ -33,6 +36,7 @@ import avatar1 from 'assets/images/users/avatar-1.png';
 import avatar2 from 'assets/images/users/avatar-2.png';
 import avatar3 from 'assets/images/users/avatar-3.png';
 import avatar4 from 'assets/images/users/avatar-4.png';
+// import AuthLogin from 'pages/authentication/auth-forms/AuthLogin';
 
 // avatar style
 const avatarSX = {
@@ -72,8 +76,19 @@ const status = [
 const DashboardDefault = () => {
   const [value, setValue] = useState('today');
   const [slot, setSlot] = useState('week');
+  // const [loggedin,Setloggedin] = React.useState(true);
 
+  // var isloggedin = secureLocalStorage.getItem('ap_');
+  // if(isloggedin == false || isloggedin == null)
+  // {
+  //   Setloggedin(false);
+  // }
+  // else{
+  //   Setloggedin(true);
+  // }
   return (
+    <>
+    {/* {loggedin? */}
     <Grid container rowSpacing={4.5} columnSpacing={2.75}>
       {/* row 1 */}
       <Grid item xs={12} sx={{ mb: -2.25 }}>
@@ -338,6 +353,8 @@ const DashboardDefault = () => {
         </MainCard>
       </Grid>
     </Grid>
+   
+    </>
   );
 };
 

@@ -1,6 +1,8 @@
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import secureLocalStorage from 'react-secure-storage';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -19,6 +21,7 @@ import { openDrawer } from 'store/reducers/menu';
 
 const MainLayout = () => {
   const theme = useTheme();
+  const [loggedin,Setloggedin] = React.useState(true);
   const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
   const dispatch = useDispatch();
 
@@ -44,14 +47,23 @@ const MainLayout = () => {
 
   //Check user loggedin or not
   useEffect(() => {
-    console.log("checking loggedin or not")
+    var isloggedin = secureLocalStorage.getItem('ap_');
+    console.log("welcomeeeeeeeeeeeeeeeeeeeee")
+    if(isloggedin == false || isloggedin == null)
+    {
+      Setloggedin(false);
+    }
+    else
+    {
+      Setloggedin(true);
+    }
   }, []);
 
 
   return (
     <Box sx={{ display: 'flex', width: '100%' }}>
-      <Header open={open} handleDrawerToggle={handleDrawerToggle} />
-      <Drawer open={open} handleDrawerToggle={handleDrawerToggle} />
+      {loggedin?<Header open={open} handleDrawerToggle={handleDrawerToggle} />:null}
+      {loggedin?<Drawer open={open} handleDrawerToggle={handleDrawerToggle} />:null}
       <Box component="main" sx={{ width: '100%', flexGrow: 1, p: { xs: 2, sm: 3 } }}>
         <Toolbar />
         <Breadcrumbs navigation={navigation} title />
