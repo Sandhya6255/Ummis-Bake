@@ -1,4 +1,5 @@
 import React from 'react';
+import secureLocalStorage from 'react-secure-storage';
 
 // material-ui
 import {
@@ -45,6 +46,7 @@ const AddProduct = () => {
         console.log(imgreader,"imgreader");
     };
 
+
     //Submit product details
     const AddNewProduct = () => {
         var productname = document.getElementById("productname").value;
@@ -63,16 +65,20 @@ const AddProduct = () => {
         }
 
         if (productname != "" && costperunit != "" &&  description != "" && companyname != "" && category != "") {
-            axios.post(url.addproduct, data )
+        
+        axios.defaults.headers.common = {'Authorization': `Bearer ${secureLocalStorage.getItem('at_')}`}
+
+        axios.post(url.addproduct, data )
                 .then(() => {
                     $(".modal-body").html("<p class=text-danger>New product added</p>");
                     $(".modal-title").html("")
                     $(".modal-footerdiv").html("<button id=redirectC>ok</button>");
                     $("#redirectC").addClass("btn btn-primary");
                     $("#redirectC").on("click", function () {
-                      $("#modalDialog").toggle('hide');
-                    //   setCurrentTab("viewproducts");
-                    window.location.reload();
+                        $("#modalDialog").toggle('hide');
+                        //   setCurrentTab("viewinventory");
+                        window.location.reload();
+                        setCurrentTab("viewproducts");
                     });
                     $("#modalDialog").toggle('show');
                 })

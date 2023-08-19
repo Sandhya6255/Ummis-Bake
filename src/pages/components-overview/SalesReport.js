@@ -1,6 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 import { InputLabel } from '@mui/material';
+import secureLocalStorage from 'react-secure-storage';
 
 //third-party
 import axios from 'axios';
@@ -64,6 +65,8 @@ export default function SalesReport() {
         tr.addClass('shown');
       }
     });
+
+    axios.defaults.headers.common = {'Authorization': `Bearer ${secureLocalStorage.getItem('at_')}`}
 
     //Get all product lists
     axios.get(url.sales)

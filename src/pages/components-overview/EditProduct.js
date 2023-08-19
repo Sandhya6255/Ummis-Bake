@@ -33,6 +33,7 @@ const EditProduct = () => {
     React.useEffect(() => {
         console.log(secureLocalStorage.getItem("ED_"))
         var datareceived = secureLocalStorage.getItem("ED_");
+        console.log(datareceived)
         for (let i = 0; i < datareceived.length; i++) {
            productid = datareceived[0];
             if (datareceived[10] != null) {
@@ -78,6 +79,7 @@ const EditProduct = () => {
 
         console.log(imgreader, "imgreader");
     };
+    axios.defaults.headers.common = {'Authorization': `Bearer ${secureLocalStorage.getItem('at_')}`}
 
     //Submit product details
     const EditProduct = () => {
@@ -95,6 +97,7 @@ const EditProduct = () => {
             description: description,
             product_image: imgreader
         }
+        axios.defaults.headers.common = {'Authorization': `Bearer ${secureLocalStorage.getItem('at_')}`}
 
         if (productname != "" && costperunit != "" && description != "" && companyname != "" && category != "") {
             axios.put(url.addproduct+productid+"/", data)

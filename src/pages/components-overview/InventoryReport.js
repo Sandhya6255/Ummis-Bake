@@ -5,6 +5,7 @@ import $ from 'jquery';
 import axios from 'axios';
 import 'datatables.net-responsive';
 import "react-phone-number-input/style.css";
+import secureLocalStorage from 'react-secure-storage';
 
 //project import
 import url from 'routes/url';
@@ -16,83 +17,12 @@ export default function InventoryReport() {
     $.extend($.fn.dataTable.defaults, {
       responsive: true
     });
-    $('#tbl_sales').DataTable({
-      columnDefs: [
-        {
-          targets: 0,
-          className: 'dt-control',
-          orderable: false,
-          visible:false
-        },
-        {
-          target: 7,
-          visible: false,
-        },
-        {
-          target: 8,
-          visible: false,
-        },
-        {
-          target: 9,
-          visible: false,
-        },
-        {
-          target: 10,
-          visible: false,
-        },
-        {
-          target: 11,
-          visible: false,
-        },
-        {
-          target: 12,
-          visible: false,
-        },
-        {
-          target: 13,
-          visible: false,
-        }]
-    });
+    $('#tbl_sales').DataTable();
     getallreports();
   }, []);
 
   function getallreports() {
-    let table = $('#tbl_sales').DataTable({
-      columnDefs: [
-        {
-          targets: 0,
-          className: 'dt-control',
-          orderable: false
-        },
-        {
-          target: 7,
-          visible: false,
-        },
-        {
-          target: 8,
-          visible: false,
-        },
-        {
-          target: 9,
-          visible: false,
-        },
-        {
-          target: 10,
-          visible: false,
-        },
-        {
-          target: 11,
-          visible: false,
-        },
-        {
-          target: 12,
-          visible: false,
-        },
-        {
-          target: 13,
-          visible: false,
-        }]
-    });
+    let table = $('#tbl_sales').DataTable();
 
     /* Formatting function for row details - modify as you need */
     function format(d) {
@@ -145,12 +75,13 @@ export default function InventoryReport() {
       }
     });
 
+    axios.defaults.headers.common = {'Authorization': `Bearer ${secureLocalStorage.getItem('at_')}`}
+
     //Get all product lists
     axios.get(url.inventorylist)
       .then(function (response) {
         if(response.status == 200){
           table.clear();
-          console.log(response,"inventory")
           for (let i = 0; i < response.data.results.length; i++) {
 
             var d1 = new Date(response.data.results[i].created_at);
@@ -159,78 +90,32 @@ export default function InventoryReport() {
             var d2 = new Date(response.data.results[i].updated_at);
             var updated_at = d2.toLocaleString().split('t')[0];
             
-            var img;
-            if(response.data.results[i].product_image === null)
-            {
-              img = '--:--'
-            }
-            else
-            {
-              img = '<img src='+response.data.results[i].product_image+' height="150" width="150" alt="product_image" />';
-            }
+            // var img;
+            // if(response.data.results[i].product_image === null)
+            // {
+            //   img = '--:--'
+            // }
+            // else
+            // {
+            //   img = '<img src='+response.data.results[i].product_image+' height="150" width="150" alt="product_image" />';
+            // }
 
             var btn = '<div><button class="btn btn-sm btn-primary edit mx-1" id='+response.data.results[i].id+'>Edit</button>'+
             '<button class="btn btn-sm btn-danger delete mx-1" id='+response.data.results[i].id+'>Delete</button></div>'
 
             table.row.add(
               [
-                '',
+                // '',
                 response.data.results[i].id,
-                response.data.results[i].name,
-                response.data.results[i].description,
-                response.data.results[i].price,
-                img,
+                response.data.results[i].product.name,
+                response.data.results[i].available_quantity,
+                response.data.results[i].total_sold,
+                response.data.results[i].franchise,
                 created_at,
                 updated_at,
                 btn
               ]
             );
-
-             //delete list
-             $('#tbl_sales tbody').on('click', '.delete', function () {
-              axios.delete(''+$(this)[0].id)
-              .then(function (response) {
-                if(response.status == 200){
-                  $(".modal-body").html("<p class=text-danger>Product item deleted.</p>");
-                  $(".modal-title").html("")
-                  $(".modal-footerdiv").html("<button id=redirectdel>ok</button>");
-                  $("#redirectdel").addClass("btn btn-primary");
-                  $("#redirectdel").on("click", function () {
-                    $("#modalDialog").toggle('hide');
-                    table
-                    .row($(this).parents('tr') )
-                    .remove()
-                    .draw();
-                    // window.location.reload();
-                  });
-                  $("#modalDialog").toggle('show');
-                }
-              })
-              .catch(function (res) {
-                if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
-                  if (res.response.status === 401) {
-                    $(".modal-body").html("<p class=text-danger>" + res.response.status + " : Unauthorized access</p>");
-                    $(".modal-title").html("<h5 class=text-danger>Login Failed!</h5>")
-                    $(".modal-footerdiv").html("<button id=redirect1>ok</button>");
-                    $("#redirect1").addClass("btn btn-primary");
-                    $("#redirect1").on("click", function () {
-                      $("#modalDialog").toggle('hide');
-                    });
-                    $("#modalDialog").toggle('show');
-                  }
-                }
-                else if (res.code !== '' && res.code === 'ERR_NETWORK' || res.code === 'ECONNABORTED') {
-                  $(".modal-body").html("<p class=text-danger>Network Error!</p>");
-                  $(".modal-title").html("")
-                  $(".modal-footerdiv").html("<button id=redirect2 class=btn-primary>ok</button>");
-                  $("#redirect2").addClass("btn btn-block");
-                  $("#redirect2").on("click", function () {
-                    $("#modalDialog").toggle('hide');
-                  });
-                  $("#modalDialog").toggle('show');
-                }
-              })
-            });
           }
           table.draw();
       }
@@ -261,18 +146,70 @@ export default function InventoryReport() {
       })
   }
 
+  //delete list
+  // $('#tbl_sales tbody').on('click', '.delete', function () {
+  //   axios.delete(url.del_inventory+$(this)[0].id)
+  //   .then(function (response) {
+  //     console.log(response,"deleted");
+  //     var table = $('#tbl_sales').DataTable();
+	// 	table
+	// 		.row($(this).parents('tr'))
+	// 		.remove()
+	// 	.draw();
+		
+  //       $(".modal-body").html("<p class=text-danger>Inventory details deleted.</p>");
+  //       $(".modal-title").html("");
+  //       $(".modal-footerdiv").html("");
+  //       $(".modal-footerdiv").html("<button id=redirectdel>ok</button>");
+  //       $("#redirectdel").addClass("btn btn-primary");
+  //       $("#redirectdel").on("click", function () {
+  //         // $("#modalDialog").toggle('hide');
+  //         // table
+  //         // .row($(this).parents('tr') )
+  //         // .remove()
+  //         // .draw();
+  //         window.location.reload();
+  //       });
+  //       $("#modalDialog").toggle('show');
+  //   })
+  //   .catch(function (res) {
+  //     if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
+  //       if (res.response.status === 401) {
+  //         $(".modal-body").html("<p class=text-danger>" + res.response.status + " : Unauthorized access</p>");
+  //         $(".modal-title").html("<h5 class=text-danger>Login Failed!</h5>")
+  //         $(".modal-footerdiv").html("<button id=redirect1>ok</button>");
+  //         $("#redirect1").addClass("btn btn-primary");
+  //         $("#redirect1").on("click", function () {
+  //           $("#modalDialog").toggle('hide');
+  //         });
+  //         $("#modalDialog").toggle('show');
+  //       }
+  //     }
+  //     else if (res.code !== '' && res.code === 'ERR_NETWORK' || res.code === 'ECONNABORTED') {
+  //       $(".modal-body").html("<p class=text-danger>Network Error!</p>");
+  //       $(".modal-title").html("")
+  //       $(".modal-footerdiv").html("<button id=redirect2 class=btn-primary>ok</button>");
+  //       $("#redirect2").addClass("btn btn-block");
+  //       $("#redirect2").on("click", function () {
+  //         $("#modalDialog").toggle('hide');
+  //       });
+  //       $("#modalDialog").toggle('show');
+  //     }
+  //   })
+  // });
+
   return (
     <>
       <div className="table-responsive mb-3">
         <table className="table nowrap w-100" id="tbl_sales">
           <thead>
             <tr className='text-left'>
-              <th></th>
+              {/* <th></th> */}
               <th>ID</th>
               <th>Product</th>
               <th>Available Qty</th>
               <th>Total sold</th>
-              <th>Franchise</th>
+              <th>Franchise ID</th>
               <th>Created at</th>
               <th>Updated at</th>
               <th>Actions</th>

@@ -1,4 +1,6 @@
 import React from 'react';
+import secureLocalStorage from 'react-secure-storage';
+import $ from 'jquery';
 
 // material-ui
 import {
@@ -23,7 +25,7 @@ import url from 'routes/url';
 
 // ============================|| ADD - SALES ||============================ //
 
-var  product_lists;
+var product_lists;
 const SalesEntry = () => {
     const [product, setProductlist] = useState([]);
 
@@ -56,6 +58,8 @@ const SalesEntry = () => {
         // console.log($('option:selected', this))
     };
 
+    axios.defaults.headers.common = { 'Authorization': `Bearer ${secureLocalStorage.getItem('at_')}` }
+
     //Submit sales details
     const AddNewSale = () => {
         var customername = document.getElementById("customername").value;
@@ -64,56 +68,65 @@ const SalesEntry = () => {
         var quantity = document.getElementById("quantity").value;
         var price = document.getElementById("price").value;
         var storepoint = document.getElementById("storepoint").value;
+        var productname=$("#productselect").find("option:selected",this).val();
+        var quantity_type=$("#quantity_type").find("option:selected",this).val();
+        var payment_mode=$("#payment_mode").find("option:selected",this).val();
+
 
         var data = {
             total_amount: price,
             quantity_sold: quantity,
-            customername:customername,
-            mobile: mobile,
-            location:location,
-            storepoint:storepoint,
-            product:productname,
-            user:franchise
+            phone_no: mobile,
+            location: location,
+            storepoint: storepoint,
+            product: productname,
+            quantity_type:quantity_type,
+            payment_mode:payment_mode
         }
 
-        if (customername != "" && mobile != "" &&  location != "" && companyname != "" && category != "") {
-            axios.post(url.addproduct, data )
-                .then(() => {
-                    $(".modal-body").html("<p class=text-danger>New product added</p>");
-                    $(".modal-title").html("")
-                    $(".modal-footerdiv").html("<button id=redirectC>ok</button>");
-                    $("#redirectC").addClass("btn btn-primary");
-                    $("#redirectC").on("click", function () {
-                      $("#modalDialog").toggle('hide');
-                    //   setCurrentTab("viewproducts");
-                    window.location.reload();
-                    });
-                    $("#modalDialog").toggle('show');
+        console.log(data)
+        if (customername != "" && mobile != "" && location != "" && storepoint!=""&&price!=""
+        &&quantity!=""&&productname!="") {
+            axios.post(url.addsales, data)
+                .then((response) => {
+                    console.log(response,"response for sales")
+                    if(response.status == 200)
+                    {
+                        $(".modal-body").html("<p class=text-danger>New sale added</p>");
+                        $(".modal-title").html("")
+                        $(".modal-footerdiv").html("<button id=redirectC>ok</button>");
+                        $("#redirectC").addClass("btn btn-primary");
+                        $("#redirectC").on("click", function () {
+                            $("#modalDialog").toggle('hide');
+                            window.location.reload();
+                        });
+                        $("#modalDialog").toggle('show');
+                    }
                 })
                 .catch(function (res) {
                     if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
-                      if (res.response.status === 401) {
-                        $(".modal-body").html("<p class=text-danger>" + res.response.status + " : Unauthorized access</p>");
-                        $(".modal-title").html("<h5 class=text-danger>Login Failed!</h5>")
-                        $(".modal-footerdiv").html("<button id=redirect1>ok</button>");
-                        $("#redirect1").addClass("btn btn-primary");
-                        $("#redirect1").on("click", function () {
-                          $("#modalDialog").toggle('hide');
-                        });
-                        $("#modalDialog").toggle('show');
-                      }
+                        if (res.response.status === 401) {
+                            $(".modal-body").html("<p class=text-danger>" + res.response.status + " : Unauthorized access</p>");
+                            $(".modal-title").html("<h5 class=text-danger>Login Failed!</h5>")
+                            $(".modal-footerdiv").html("<button id=redirect1>ok</button>");
+                            $("#redirect1").addClass("btn btn-primary");
+                            $("#redirect1").on("click", function () {
+                                $("#modalDialog").toggle('hide');
+                            });
+                            $("#modalDialog").toggle('show');
+                        }
                     }
                     else if (res.code !== '' && res.code === 'ERR_NETWORK' || res.code === 'ECONNABORTED') {
-                      $(".modal-body").html("<p class=text-danger>Network Error!</p>");
-                      $(".modal-title").html("")
-                      $(".modal-footerdiv").html("<button id=redirect2 class=btn-primary>ok</button>");
-                      $("#redirect2").addClass("btn btn-block");
-                      $("#redirect2").on("click", function () {
-                        $("#modalDialog").toggle('hide');
-                      });
-                      $("#modalDialog").toggle('show');
+                        $(".modal-body").html("<p class=text-danger>Network Error!</p>");
+                        $(".modal-title").html("")
+                        $(".modal-footerdiv").html("<button id=redirect2 class=btn-primary>ok</button>");
+                        $("#redirect2").addClass("btn btn-block");
+                        $("#redirect2").on("click", function () {
+                            $("#modalDialog").toggle('hide');
+                        });
+                        $("#modalDialog").toggle('show');
                     }
-                  })
+                })
         }
     }
 
@@ -236,9 +249,9 @@ const SalesEntry = () => {
                                         <InputLabel htmlFor="quantity-signup">Quantity*</InputLabel>
                                         <div className='row mx-0'>
                                             <div className='col-md-6 col-xs-12 col-lg-6'>
-                                                <select className='form-select form-select-sm'>
-                                                    <option>PCS</option>
-                                                    <option>WEIGHT</option>
+                                                <select className='form-select form-select-sm' id="quantity_type">
+                                                    <option value="piece">PCS</option>
+                                                    <option value="weight">WEIGHT</option>
                                                 </select>
                                             </div>
                                             <div className='col-md-6 col-xs-12 col-lg-6'>
@@ -280,14 +293,14 @@ const SalesEntry = () => {
                                         <InputLabel htmlFor="price-signup">Price*</InputLabel>
                                         <div className='row mx-0'>
                                             <div className='col-md-6 col-xs-12 col-lg-6'>
-                                                <select className='form-select form-select-sm'>
-                                                    <option>CASH</option>
-                                                    <option>BANK</option>
+                                                <select className='form-select form-select-sm' id="payment_mode">
+                                                    <option value="cash">CASH</option>
+                                                    <option value="bank">BANK</option>
                                                 </select>
                                             </div>
                                             <div className='col-md-6 col-xs-12 col-lg-6'>
                                                 <OutlinedInput
-                                                    id="price-count"
+                                                    id="price"
                                                     // value={values.customername}
                                                     name="pricecount"
                                                     onBlur={handleBlur}
@@ -304,7 +317,7 @@ const SalesEntry = () => {
                                     <Stack spacing={1}>
                                         <InputLabel htmlFor="storepoint-signup">Store point*</InputLabel>
                                         <OutlinedInput
-                                            id="storepoint-login"
+                                            id="storepoint"
                                             type="storepoint"
                                             value={values.storepoint}
                                             name="storepoint"
@@ -321,8 +334,8 @@ const SalesEntry = () => {
                             <Grid item xs={12}>
                                 <AnimateButton>
                                     <Button disableElevation disabled={isSubmitting} size="medium"
-                                     style={{ margin: '0 auto', display: "flex" }} 
-                                     type="submit" variant="contained" color="primary" onClick={AddNewSale}>
+                                        style={{ margin: '0 auto', display: "flex" }}
+                                        type="submit" variant="contained" color="primary" onClick={AddNewSale}>
                                         Submit
                                     </Button>
                                 </AnimateButton>

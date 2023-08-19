@@ -64,6 +64,7 @@ const AddFranchise = () => {
 
   const [currentTab, setCurrentTab] = useState("addfranchise");
 
+
   //Submit user details
   const AddNewFranchise = () => {
     var name = document.getElementById("name").value;
@@ -91,23 +92,22 @@ const AddFranchise = () => {
 
     console.log(data,"data");
 
-    const token = secureLocalStorage.getItem('at_');
-    axios.defaults.headers.common = {
-      'Authorization': `Bearer ${token}`
-    };
-
     if (name != "" && description != "" && address != "" && email != "" && password != ""
       && date_established != "" && location != "" && pin != "" && phonenumber != "" && username != "") {
-      axios.post(url.addfranchise, data )
+    
+    axios.defaults.headers.common = {'Authorization': `Bearer ${secureLocalStorage.getItem('at_')}`}
+  
+    axios.post(url.addfranchise, data )
         .then(() => {
           $(".modal-body").html("<p class=text-danger>New franchise added</p>");
           $(".modal-title").html("")
           $(".modal-footerdiv").html("<button id=redirectC>ok</button>");
           $("#redirectC").addClass("btn btn-primary");
           $("#redirectC").on("click", function () {
-            $("#modalDialog").toggle('hide');
-            // setCurrentTab("viewfranchise");
-            window.location.reload();
+              // $("#modalDialog").toggle('hide');
+              //   setCurrentTab("viewinventory");
+              window.location.reload();
+              setCurrentTab("viewfranchise");
           });
           $("#modalDialog").toggle('show');
         })
@@ -115,6 +115,16 @@ const AddFranchise = () => {
           if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
             if (res.response.status === 401) {
               $(".modal-body").html("<p class=text-danger>" + res.response.status + " : Unauthorized access</p>");
+              $(".modal-title").html("<h5 class=text-danger>Login Failed!</h5>")
+              $(".modal-footerdiv").html("<button id=redirect1>ok</button>");
+              $("#redirect1").addClass("btn btn-primary");
+              $("#redirect1").on("click", function () {
+                $("#modalDialog").toggle('hide');
+              });
+              $("#modalDialog").toggle('show');
+            }
+            if (res.response.status === 400) {
+              $(".modal-body").html("<p class=text-danger>Bad request found</p>");
               $(".modal-title").html("<h5 class=text-danger>Login Failed!</h5>")
               $(".modal-footerdiv").html("<button id=redirect1>ok</button>");
               $("#redirect1").addClass("btn btn-primary");

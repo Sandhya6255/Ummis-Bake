@@ -15,6 +15,7 @@ import {
 import { Tab, Nav } from 'react-bootstrap';
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import secureLocalStorage from 'react-secure-storage';
 
 // third party
 import * as Yup from 'yup';
@@ -33,6 +34,8 @@ const AddInventory = () => {
     const [franchise, setFranchiselist] = useState([]);
     const [product, setProductlist] = useState([]);
     const [currentTab, setCurrentTab] = useState("addinventory");
+
+    axios.defaults.headers.common = {'Authorization': `Bearer ${secureLocalStorage.getItem('at_')}`}
 
     //load franchise and product
     React.useEffect(() => {
@@ -103,7 +106,7 @@ const AddInventory = () => {
         if (franchise != "" && product != "" && available_quantity != "") {
             axios.post(url.addinventory, data)
                 .then(() => {
-                    $(".modal-body").html("<p class=text-danger>New franchise added</p>");
+                    $(".modal-body").html("<p class=text-danger>New inventory added</p>");
                     $(".modal-title").html("")
                     $(".modal-footerdiv").html("<button id=redirectC>ok</button>");
                     $("#redirectC").addClass("btn btn-primary");

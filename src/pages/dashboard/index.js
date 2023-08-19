@@ -1,81 +1,82 @@
 
 import React from 'react';
-import { useState } from 'react';
-// import secureLocalStorage from 'react-secure-storage';
+// import { useState } from 'react';
+import secureLocalStorage from 'react-secure-storage';
 
 // material-ui
 import {
-  Avatar,
-  AvatarGroup,
-  Box,
-  Button,
+  // Avatar,
+  // AvatarGroup,
+  // Box,
+  // Button,
   Grid,
-  List,
-  ListItemAvatar,
-  ListItemButton,
-  ListItemSecondaryAction,
-  ListItemText,
-  MenuItem,
-  Stack,
-  TextField,
+  // List,
+  // ListItemAvatar,
+  // ListItemButton,
+  // ListItemSecondaryAction,
+  // ListItemText,
+  // MenuItem,
+  // Stack,
+  // TextField,
   Typography
 } from '@mui/material';
 
 // project import
-import OrdersTable from './OrdersTable';
-import IncomeAreaChart from './IncomeAreaChart';
-import MonthlyBarChart from './MonthlyBarChart';
-import ReportAreaChart from './ReportAreaChart';
-import SalesColumnChart from './SalesColumnChart';
-import MainCard from 'components/MainCard';
+// import OrdersTable from './OrdersTable';
+// import IncomeAreaChart from './IncomeAreaChart';
+// import MonthlyBarChart from './MonthlyBarChart';
+// import ReportAreaChart from './ReportAreaChart';
+// import SalesColumnChart from './SalesColumnChart';
+// import MainCard from 'components/MainCard';
 import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
-
+import url from 'routes/url';
 // assets
-import { GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
-import avatar1 from 'assets/images/users/avatar-1.png';
-import avatar2 from 'assets/images/users/avatar-2.png';
-import avatar3 from 'assets/images/users/avatar-3.png';
-import avatar4 from 'assets/images/users/avatar-4.png';
+// import { GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
+// import avatar1 from 'assets/images/users/avatar-1.png';
+// import avatar2 from 'assets/images/users/avatar-2.png';
+// import avatar3 from 'assets/images/users/avatar-3.png';
+// import avatar4 from 'assets/images/users/avatar-4.png';
 // import AuthLogin from 'pages/authentication/auth-forms/AuthLogin';
 
 // avatar style
-const avatarSX = {
-  width: 36,
-  height: 36,
-  fontSize: '1rem'
-};
+// const avatarSX = {
+//   width: 36,
+//   height: 36,
+//   fontSize: '1rem'
+// };
 
 // action style
-const actionSX = {
-  mt: 0.75,
-  ml: 1,
-  top: 'auto',
-  right: 'auto',
-  alignSelf: 'flex-start',
-  transform: 'none'
-};
+// const actionSX = {
+//   mt: 0.75,
+//   ml: 1,
+//   top: 'auto',
+//   right: 'auto',
+//   alignSelf: 'flex-start',
+//   transform: 'none'
+// };
 
 // sales report status
-const status = [
-  {
-    value: 'today',
-    label: 'Today'
-  },
-  {
-    value: 'month',
-    label: 'This Month'
-  },
-  {
-    value: 'year',
-    label: 'This Year'
-  }
-];
+// const status = [
+//   {
+//     value: 'today',
+//     label: 'Today'
+//   },
+//   {
+//     value: 'month',
+//     label: 'This Month'
+//   },
+//   {
+//     value: 'year',
+//     label: 'This Year'
+//   }
+// ];
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
+
 const DashboardDefault = () => {
-  const [value, setValue] = useState('today');
-  const [slot, setSlot] = useState('week');
+  // const [value, setValue] = useState('today');
+  // const [slot, setSlot] = useState('week');
   // const [loggedin,Setloggedin] = React.useState(true);
 
   // var isloggedin = secureLocalStorage.getItem('ap_');
@@ -86,6 +87,40 @@ const DashboardDefault = () => {
   // else{
   //   Setloggedin(true);
   // }
+
+  axios.defaults.headers.common = {'Authorization': `Bearer ${secureLocalStorage.getItem('at_')}`}
+
+  React.useEffect(()=>
+  {
+    axios.post(url.dashboardcount,)
+    .then(function (response) {
+      console.log(response,"dash res");
+    })
+    .catch(function (res) {
+      if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
+        if (res.response.status === 401) {
+          $(".modal-body").html("<p class=text-danger>" + res.response.status + " : Unauthorized access</p>");
+          $(".modal-title").html("<h5 class=text-danger>Login Failed!</h5>")
+          $(".modal-footerdiv").html("<button id=redirect1>ok</button>");
+          $("#redirect1").addClass("btn btn-primary");
+          $("#redirect1").on("click", function () {
+            $("#modalDialog").toggle('hide');
+          });
+          $("#modalDialog").toggle('show');
+        }
+      }
+      else if (res.code !== '' && res.code === 'ERR_NETWORK' || res.code === 'ECONNABORTED') {
+        $(".modal-body").html("<p class=text-danger>Network Error!</p>");
+        $(".modal-title").html("")
+        $(".modal-footerdiv").html("<button id=redirect2 class=btn-primary>ok</button>");
+        $("#redirect2").addClass("btn btn-block");
+        $("#redirect2").on("click", function () {
+          $("#modalDialog").toggle('hide');
+        });
+        $("#modalDialog").toggle('show');
+      }
+    })
+  },[])
   return (
     <>
     {/* {loggedin? */}
@@ -95,22 +130,36 @@ const DashboardDefault = () => {
         <Typography variant="h5">Dashboard</Typography>
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Total Page Views" count="4,42,236" percentage={59.3} extra="35,000" />
+        <AnalyticEcommerce title="Total Page Views" count={""} 
+        // percentage={59.3} extra="35,000" 
+        />
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Total Users" count="78,250" percentage={70.5} extra="8,900" />
+        <AnalyticEcommerce title="Total Users" count={""}
+        //  percentage={70.5} extra="8,900" 
+         />
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Total Order" count="18,800" percentage={27.4} isLoss color="warning" extra="1,943" />
+        <AnalyticEcommerce title="Total Order" count={""}
+        //  percentage={27.4} 
+        //  isLoss 
+         color="warning" 
+        //  extra="1,943" 
+         />
       </Grid>
       <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Total Sales" count="$35,078" percentage={27.4} isLoss color="warning" extra="$20,395" />
+        <AnalyticEcommerce title="Total Sales" count="" 
+        // percentage={27.4} 
+        // isLoss 
+        color="warning" 
+        // extra="$20,395"
+         />
       </Grid>
 
       <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
 
       {/* row 2 */}
-      <Grid item xs={12} md={7} lg={8}>
+      {/* <Grid item xs={12} md={7} lg={8}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Unique Visitor</Typography>
@@ -160,10 +209,10 @@ const DashboardDefault = () => {
           </Box>
           <MonthlyBarChart />
         </MainCard>
-      </Grid>
+      </Grid> */}
 
       {/* row 3 */}
-      <Grid item xs={12} md={7} lg={8}>
+      {/* <Grid item xs={12} md={7} lg={8}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Recent Orders</Typography>
@@ -198,10 +247,10 @@ const DashboardDefault = () => {
           </List>
           <ReportAreaChart />
         </MainCard>
-      </Grid>
+      </Grid> */}
 
       {/* row 4 */}
-      <Grid item xs={12} md={7} lg={8}>
+      {/* <Grid item xs={12} md={7} lg={8}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Sales Report</Typography>
@@ -232,8 +281,8 @@ const DashboardDefault = () => {
           </Stack>
           <SalesColumnChart />
         </MainCard>
-      </Grid>
-      <Grid item xs={12} md={5} lg={4}>
+      </Grid> */}
+      {/* <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Transaction History</Typography>
@@ -351,7 +400,7 @@ const DashboardDefault = () => {
             </Button>
           </Stack>
         </MainCard>
-      </Grid>
+      </Grid> */}
     </Grid>
    
     </>

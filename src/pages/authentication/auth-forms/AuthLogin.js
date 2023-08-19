@@ -64,16 +64,17 @@ const AuthLogin = () => {
             secureLocalStorage.setItem('at_', res.data.access);
             var token = res.data.refresh;
             var decoded = jwt_decode(token);
+            console.log(decoded)
             secureLocalStorage.setItem('ex_', decoded.exp);
             secureLocalStorage.setItem('ui_', decoded.user_id);
             secureLocalStorage.setItem('ap_', decoded.admin);
             if (decoded.admin == true) {
               secureLocalStorage.setItem('un_', "Admin");
-              window.location.href = "/dashboard";
+              window.location.href = "/dashboard/default";
             }
             else {
               secureLocalStorage.setItem('un_', "Franchise");
-              window.location.href = "/sales";
+              window.location.href = "/addsales";
             }
           }
         })

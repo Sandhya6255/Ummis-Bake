@@ -5,7 +5,8 @@ const url = {
     'home':rootapi,
     'login':rootapi+'api/user/login/',
     'changepassword':rootapi+'api/user/change-password',
-    'usertokenrefresh':rootapi+'user/token/refresh/',
+    'usertokenrefresh':rootapi+'api/user/token/refresh',
+    'dashboardcount':rootapi+'api/dashboard/',
     'sales':rootapi+'api/sales/',//list sales report
     'addsales':rootapi+'api/sales/create/',//add new sales
     'customerlist':rootapi+'api/customer/',//list customer report

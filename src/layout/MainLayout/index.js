@@ -13,6 +13,7 @@ import Drawer from './Drawer';
 import Header from './Header';
 import navigation from 'menu-items';
 import Breadcrumbs from 'components/@extended/Breadcrumbs';
+import url from 'routes/url';
 
 // types
 import { openDrawer } from 'store/reducers/menu';
@@ -48,7 +49,7 @@ const MainLayout = () => {
   //Check user loggedin or not
   useEffect(() => {
     var isloggedin = secureLocalStorage.getItem('ap_');
-    console.log("welcomeeeeeeeeeeeeeeeeeeeee")
+    console.log(isloggedin,"welcomeeeeeeee")
     if(isloggedin == false || isloggedin == null)
     {
       Setloggedin(false);
@@ -58,6 +59,42 @@ const MainLayout = () => {
       Setloggedin(true);
     }
   }, []);
+
+  React.useEffect(()=>
+  {
+    if(secureLocalStorage.getItem('at_') == null)
+    {
+      var refreshtoken = secureLocalStorage.getItem('rt_');
+      axios.post(url.usertokenrefresh,{refresh:refreshtoken})
+      .then(function (response) {
+        secureLocalStorage.setItem('at_',response.access)
+      })
+      .catch(function (res) {
+        if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
+          if (res.response.status === 401) {
+            $(".modal-body").html("<p class=text-danger>" + res.response.status + " : Unauthorized access</p>");
+            $(".modal-title").html("<h5 class=text-danger>Login Failed!</h5>")
+            $(".modal-footerdiv").html("<button id=redirect1>ok</button>");
+            $("#redirect1").addClass("btn btn-primary");
+            $("#redirect1").on("click", function () {
+              $("#modalDialog").toggle('hide');
+            });
+            $("#modalDialog").toggle('show');
+          }
+        }
+        else if (res.code !== '' && res.code === 'ERR_NETWORK' || res.code === 'ECONNABORTED') {
+          $(".modal-body").html("<p class=text-danger>Network Error!</p>");
+          $(".modal-title").html("")
+          $(".modal-footerdiv").html("<button id=redirect2 class=btn-primary>ok</button>");
+          $("#redirect2").addClass("btn btn-block");
+          $("#redirect2").on("click", function () {
+            $("#modalDialog").toggle('hide');
+          });
+          $("#modalDialog").toggle('show');
+        }
+      })
+    }
+  })
 
 
   return (

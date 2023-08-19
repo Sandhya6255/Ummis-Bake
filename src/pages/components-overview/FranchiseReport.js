@@ -5,6 +5,7 @@ import $ from 'jquery';
 import axios from 'axios';
 import 'datatables.net-responsive';
 import "react-phone-number-input/style.css";
+import secureLocalStorage from 'react-secure-storage';
 
 //project import
 import url from 'routes/url';
@@ -97,11 +98,16 @@ export default function FranchiseReport() {
       }
     });
 
+    axios.defaults.headers.common = {
+      'Authorization': `Bearer ${secureLocalStorage.getItem('at_')}`,
+      "Accept": "application/json"
+    }
+
     //Get all franchise list
     axios.get(url.franchiselist)
       .then(function (response) {
         console.log(response,"franchise response")
-        if(response.status == 200){
+        // if(response.status == 200){
           table.clear();
           for (let i = 0; i < response.data.results.length; i++) {
             var isactive;
@@ -144,25 +150,30 @@ export default function FranchiseReport() {
               ]
             );
 
+            axios.defaults.headers.common = {
+              'Authorization': `Bearer ${secureLocalStorage.getItem('at_')}`,
+              "Accept": "application/json"
+            }
+
              //delete list
              $('#tbl_franchise tbody').on('click', '.delete', function () {
-              axios.delete(''+$(this)[0].id)
-              .then(function (response) {
-                if(response.status == 200){
-                  $(".modal-body").html("<p class=text-danger>Product item deleted.</p>");
-                  $(".modal-title").html("")
-                  $(".modal-footerdiv").html("<button id=redirectdel>ok</button>");
-                  $("#redirectdel").addClass("btn btn-primary");
-                  $("#redirectdel").on("click", function () {
-                    $("#modalDialog").toggle('hide');
+              axios.delete(url.franchiselist+$(this)[0].id)
+              .then(function () {
+                // if(response.status == 200){
+                //   $(".modal-body").html("<p class=text-danger>Product item deleted.</p>");
+                //   $(".modal-title").html("")
+                //   $(".modal-footerdiv").html("<button id=redirectdel>ok</button>");
+                //   $("#redirectdel").addClass("btn btn-primary");
+                //   $("#redirectdel").on("click", function () {
+                //     $("#modalDialog").toggle('hide');
                     table
                     .row($(this).parents('tr') )
                     .remove()
                     .draw();
                     // window.location.reload();
-                  });
-                  $("#modalDialog").toggle('show');
-                }
+                //   });
+                //   $("#modalDialog").toggle('show');
+                // }
               })
               .catch(function (res) {
                 if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
@@ -191,7 +202,7 @@ export default function FranchiseReport() {
             });
           }
           table.draw();
-      }
+      // }
       })
       .catch(function (res) {
         if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {

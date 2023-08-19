@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import $ from 'jquery';
 import { Link as RouterLink } from 'react-router-dom';
+import secureLocalStorage from 'react-secure-storage';
 
 // material-ui
 import {
@@ -58,6 +59,8 @@ const ChangePassword = () => {
     const handleMouseDownPassword3 = (event) => {
         event.preventDefault();
     };
+
+    axios.defaults.headers.common = {'Authorization': `Bearer ${secureLocalStorage.getItem('at_')}`}
 
     //Submit new password
     const Submitnewpassword = () => {
