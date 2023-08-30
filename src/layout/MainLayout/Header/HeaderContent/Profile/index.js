@@ -15,8 +15,8 @@ import {
   Paper,
   Popper,
   Stack,
-  Tab,
-  Tabs,
+  // Tab,
+  // Tabs,
   Typography
 } from '@mui/material';
 
@@ -24,11 +24,13 @@ import {
 import MainCard from 'components/MainCard';
 import Transitions from 'components/@extended/Transitions';
 import ProfileTab from './ProfileTab';
-import SettingTab from './SettingTab';
+// import SettingTab from './SettingTab';
 
 // assets
 // import avatar1 from 'assets/images/users/avatar-1.png';
-import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { LogoutOutlined, 
+  // SettingOutlined, UserOutlined
+ } from '@ant-design/icons';
 
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
@@ -45,12 +47,12 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired
 };
 
-function a11yProps(index) {
-  return {
-    id: `profile-tab-${index}`,
-    'aria-controls': `profile-tabpanel-${index}`
-  };
-}
+// function a11yProps(index) {
+//   return {
+//     id: `profile-tab-${index}`,
+//     'aria-controls': `profile-tabpanel-${index}`
+//   };
+// }
 
 // ==============================|| HEADER CONTENT - PROFILE ||============================== //
 
@@ -62,6 +64,13 @@ const Profile = () => {
     secureLocalStorage.clear();
     window.location.href="/login";
   };
+
+  
+  //changepassword
+  const handleChangePassword = () =>
+  {
+   window.location.href="/changepassword";
+  }
 
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
@@ -76,11 +85,11 @@ const Profile = () => {
     setOpen(false);
   };
 
-  const [value, setValue] = useState(0);
+  // const [value, setValue] = useState(0);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  // const handleChange = (event, newValue) => {
+  //   setValue(newValue);
+  // };
 
   const iconBackColorOpen = 'grey.300';
 
@@ -161,7 +170,7 @@ const Profile = () => {
                     {open && (
                       <>
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                          <Tabs variant="fullWidth" value={value} onChange={handleChange} aria-label="profile tabs">
+                          {/* <Tabs variant="fullWidth" value={value} onChange={handleChange} aria-label="profile tabs">
                             <Tab
                               sx={{
                                 display: 'flex',
@@ -186,14 +195,14 @@ const Profile = () => {
                               label="Setting"
                               {...a11yProps(1)}
                             />
-                          </Tabs>
+                          </Tabs> */}
                         </Box>
-                        <TabPanel value={value} index={0} dir={theme.direction}>
-                          <ProfileTab handleLogout={handleLogout} />
-                        </TabPanel>
-                        <TabPanel value={value} index={1} dir={theme.direction}>
+                        {/* <TabPanel value={value} index={0} dir={theme.direction}> */}
+                          <ProfileTab handleLogout={handleLogout} handleChangePassword={handleChangePassword} />
+                        {/* </TabPanel> */}
+                        {/* <TabPanel value={value} index={1} dir={theme.direction}>
                           <SettingTab />
-                        </TabPanel>
+                        </TabPanel> */}
                       </>
                     )}
                   </MainCard>

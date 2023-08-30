@@ -31,12 +31,15 @@ const NavItem = ({ item, level }) => {
 
   const itemHandler = (id) => {
     dispatch(activeItem({ openItem: [id] }));
+    // var isSelected = (openItem.findIndex((id) => id === item.id) > -1);
+    // console.log(isSelected)
+    // console.log("drawer clicked",drawerOpen,isSelected);
   };
 
   const Icon = item.icon;
   const itemIcon = item.icon ? <Icon style={{ fontSize: drawerOpen ? '1rem' : '1.25rem' }} /> : false;
 
-  const isSelected = openItem.findIndex((id) => id === item.id) > -1;
+  var isSelected = openItem.findIndex((id) => id === item.id) > -1;
   // active menu item on page load
   useEffect(() => {
     if (pathname.includes(item.url)) {

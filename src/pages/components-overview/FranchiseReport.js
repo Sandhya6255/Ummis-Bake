@@ -14,221 +14,173 @@ export default function FranchiseReport() {
   $.DataTable = require('datatables.net');
   React.useEffect(() => {
     $.fn.dataTableExt.sErrMode = 'none';
+    $.fn.dataTableExt.sErrMode = 'none';
     $.extend($.fn.dataTable.defaults, {
       responsive: true
     });
-    $('#tbl_franchise').DataTable({
-      columnDefs: [
-        {
-          targets: 0,
-          className: 'dt-control',
-          orderable: false,
-          visible:false
-        }
-        ]
-    });
-    getallreports();
-  }, []);
 
-  function getallreports() {
     let table = $('#tbl_franchise').DataTable({
-      columnDefs: [
-        {
-          targets: 0,
-          className: 'dt-control',
-          orderable: false
-        },
-        {
-          target: 7,
-          visible: false,
-        },
-        {
-          target: 8,
-          visible: false,
-        },
-        {
-          target: 9,
-          visible: false,
-        },
-        {
-          target: 10,
-          visible: false,
-        },
-        {
-          target: 11,
-          visible: false,
-        },
-        {
-          target: 12,
-          visible: false,
-        },
-        {
-          target: 13,
-          visible: false,
-        }]
-    });
-
-    /* Formatting function for row details - modify as you need */
-    function format(d) {
-      // `d` is the original data object for the row
-      return (
-        '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
-        '<tr>' +
-        '<td style="text-align:left">Created at :&nbsp;' + d[11] + '</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td style="text-align:left;">Updated at :&nbsp;' + d[12] + '</td>' +
-        '</tr>' +
-        '</table>'
-      );
-    }
-    // Event listener for opening and closing details
-    $('#tbl_franchise tbody').on('click', 'td.dt-control', function () {
-      var tr = $(this).closest('tr');
-      var row = table.row(tr);
-      // console.log(row.data())
-      if (row.child.isShown()) {
-        // This row is already open - close it
-        row.child.hide();
-        tr.removeClass('shown');
-      } else {
-        // Open this row
-        row.child(format(row.data())).show();
-        tr.addClass('shown');
-      }
-    });
-
-    axios.defaults.headers.common = {
-      'Authorization': `Bearer ${secureLocalStorage.getItem('at_')}`,
-      "Accept": "application/json"
-    }
-
-    //Get all franchise list
-    axios.get(url.franchiselist)
-      .then(function (response) {
-        console.log(response,"franchise response")
-        // if(response.status == 200){
+      ajax: function () {
+        $.ajax({
+          url: url.franchiselist,
+          processing: true,
+          serverSide: true,
+          type: 'GET',
+          'beforeSend': function (request) {
+            request.setRequestHeader("Authorization", `Bearer ${secureLocalStorage.getItem('at_')}`);
+          }
+        }).then(function (json) {
           table.clear();
-          for (let i = 0; i < response.data.results.length; i++) {
+          console.log(json);
+          for (let i = 0; i < json.results.length; i++) {
             var isactive;
 
-            var d1 = new Date(response.data.results[i].created_at);
+            var d1 = new Date(json.results[i].data.created_at);
             var created_at = d1.toLocaleString().split('t')[0];
 
-            var d2 = new Date(response.data.results[i].updated_at);
+            var d2 = new Date(json.results[i].data.updated_at);
             var updated_at = d2.toLocaleString().split('t')[0];
 
-            var d3 = new Date(response.data.results[i].date_established);
+            var d3 = new Date(json.results[i].data.date_established);
             var date_established = d3.toLocaleString().split('t')[0];
 
-            if (response.data.results[i].is_active === true) {
-              isactive = '<span class="badge badge-success text-dark">yes</span>';
+            if (json.results[i].data.is_active === true) {
+              isactive = '<span class="badge-success rounded-pill text-white p-1">Active</span>';
             }
             else {
-              isactive = '<span class="badge badge-danger text-dark">no</span>';
+              isactive = '<span class="badge-danger rounded-pill text-white p-1">Not Active</span>';
             }
-
-            var btn = '<div><button class="btn btn-sm btn-primary edit mx-1" id='+response.data.results[i].id+'>Edit</button>'+
-            '<button class="btn btn-sm btn-danger delete mx-1" id='+response.data.results[i].id+'>Delete</button></div>'
 
             table.row.add(
               [
-                '',
-                response.data.results[i].id,
-                response.data.results[i].name,
-                response.data.results[i].description,
-                response.data.results[i].location,
-                response.data.results[i].pin,
-                response.data.results[i].username,
-                response.data.results[i].contact_email,
-                response.data.results[i].phone_number,
+                json.results[i].data.id,
+                json.results[i].data.name,
+                json.results[i].data.description,
+                json.results[i].data.location,
+                json.results[i].data.pin,
+                json.results[i].data.username,
+                json.results[i].data.contact_email,
+                json.results[i].data.phone_number,
                 date_established,
                 isactive,
                 created_at,
                 updated_at,
-                btn
+                json.results[i].data.is_active
               ]
             );
 
-            axios.defaults.headers.common = {
-              'Authorization': `Bearer ${secureLocalStorage.getItem('at_')}`,
-              "Accept": "application/json"
-            }
+            table.off('click.rowClick').on('click.rowClick', 'button', function (e) {
+              let data = table.row(e.target.closest('tr')).data();
+              //edit list
+              if (e.target.classList.contains("btnEdit") == true) {
+                secureLocalStorage.setItem("ED_", data);
+                window.location.href = "/editfranchise";
+              }
 
-             //delete list
-             $('#tbl_franchise tbody').on('click', '.delete', function () {
-              axios.delete(url.franchiselist+$(this)[0].id)
-              .then(function () {
-                // if(response.status == 200){
-                //   $(".modal-body").html("<p class=text-danger>Product item deleted.</p>");
-                //   $(".modal-title").html("")
-                //   $(".modal-footerdiv").html("<button id=redirectdel>ok</button>");
-                //   $("#redirectdel").addClass("btn btn-primary");
-                //   $("#redirectdel").on("click", function () {
-                //     $("#modalDialog").toggle('hide');
-                    table
-                    .row($(this).parents('tr') )
-                    .remove()
-                    .draw();
-                    // window.location.reload();
-                //   });
-                //   $("#modalDialog").toggle('show');
-                // }
-              })
-              .catch(function (res) {
-                if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
-                  if (res.response.status === 401) {
-                    $(".modal-body").html("<p class=text-danger>" + res.response.status + " : Unauthorized access</p>");
-                    $(".modal-title").html("<h5 class=text-danger>Login Failed!</h5>")
-                    $(".modal-footerdiv").html("<button id=redirect1>ok</button>");
-                    $("#redirect1").addClass("btn btn-primary");
-                    $("#redirect1").on("click", function () {
+              //delete list
+              if (e.target.classList.contains("btnRemove") == true) {
+                axios.delete(url.franchiselist + data[0])
+                  .then(function (res) {
+                    console.log(res)
+                    $(".modal-body").html("<p class=text-danger>Franchise details deleted</p>");
+                    $(".modal-title").html("")
+                    $(".modal-footerdiv").html("<button id=redirect33>ok</button>");
+                    $("#redirect33").addClass("btn btn-primary");
+                    $("#redirect33").on("click", function () {
                       $("#modalDialog").toggle('hide');
+                      table
+                        .row($(this).parents('tr'))
+                        .remove()
+                        .draw();
+                      window.location.reload();
                     });
                     $("#modalDialog").toggle('show');
-                  }
-                }
-                else if (res.code !== '' && res.code === 'ERR_NETWORK' || res.code === 'ECONNABORTED') {
-                  $(".modal-body").html("<p class=text-danger>Network Error!</p>");
-                  $(".modal-title").html("")
-                  $(".modal-footerdiv").html("<button id=redirect2 class=btn-primary>ok</button>");
-                  $("#redirect2").addClass("btn btn-block");
-                  $("#redirect2").on("click", function () {
-                    $("#modalDialog").toggle('hide');
-                  });
-                  $("#modalDialog").toggle('show');
-                }
-              })
+                  })
+                  .catch(function (res) {
+                    console.log(res)
+                    // if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
+                    if (res.response.status === 401) {
+                      $(".modal-body").html("<p class=text-danger>" + res.response.status + " : Unauthorized access</p>");
+                      $(".modal-title").html("")
+                      $(".modal-footerdiv").html("<button id=redirect31>ok</button>");
+                      $("#redirect31").addClass("btn btn-primary");
+                      $("#redirect31").on("click", function () {
+                        $("#modalDialog").toggle('hide');
+                      });
+                      $("#modalDialog").toggle('show');
+                    }
+                    else if (res.response.status === 400) {
+                      $(".modal-body").html("<p class=text-danger>Bad request found</p>");
+                      $(".modal-title").html("");
+                      $(".modal-footerdiv").html("<button id=redirect1ff>ok</button>");
+                      $("#redirect1ff").addClass("btn btn-primary");
+                      $("#redirect1ff").on("click", function () {
+                        $("#modalDialog").toggle('hide');
+                      });
+                      $("#modalDialog").toggle('show');
+                    }
+                    // }
+                    else {
+                      $(".modal-body").html("<p class=text-danger>Network Error!</p>");
+                      $(".modal-title").html("")
+                      $(".modal-footerdiv").html("<button id=redirect24>ok</button>");
+                      $("#redirect24").addClass("btn btn-primary");
+                      $("#redirect24").on("click", function () {
+                        $("#modalDialog").toggle('hide');
+                      });
+                      $("#modalDialog").toggle('show');
+                    }
+                  })
+              }
             });
           }
           table.draw();
-      // }
-      })
-      .catch(function (res) {
-        if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
-          if (res.response.status === 401) {
-            $(".modal-body").html("<p class=text-danger>" + res.response.status + " : Unauthorized access</p>");
-            $(".modal-title").html("<h5 class=text-danger>Login Failed!</h5>")
-            $(".modal-footerdiv").html("<button id=redirect1>ok</button>");
-            $("#redirect1").addClass("btn btn-primary");
-            $("#redirect1").on("click", function () {
-              $("#modalDialog").toggle('hide');
-            });
-            $("#modalDialog").toggle('show');
-          }
-        }
-        else if (res.code !== '' && res.code === 'ERR_NETWORK' || res.code === 'ECONNABORTED') {
-          $(".modal-body").html("<p class=text-danger>Network Error!</p>");
-          $(".modal-title").html("")
-          $(".modal-footerdiv").html("<button id=redirect2 class=btn-primary>ok</button>");
-          $("#redirect2").addClass("btn btn-block");
-          $("#redirect2").on("click", function () {
-            $("#modalDialog").toggle('hide');
+        })
+          .catch(function (res) {
+            // if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
+            if (res.response.status === 401) {
+              $(".modal-body").html("<p class=text-danger>" + res.response.status + " : Unauthorized access</p>");
+              $(".modal-title").html("")
+              $(".modal-footerdiv").html("<button id=redirect1f>ok</button>");
+              $("#redirect1f").addClass("btn btn-primary");
+              $("#redirect1f").on("click", function () {
+                $("#modalDialog").toggle('hide');
+              });
+              $("#modalDialog").toggle('show');
+            }
+            if (res.response.status === 400) {
+              $(".modal-body").html("<p class=text-danger>Bad request found</p>");
+              $(".modal-title").html("");
+              $(".modal-footerdiv").html("<button id=redirectf1>ok</button>");
+              $("#redirectf1").addClass("btn btn-primary");
+              $("#redirectf1").on("click", function () {
+                $("#modalDialog").toggle('hide');
+              });
+              $("#modalDialog").toggle('show');
+            }
+            // }
+            else {
+              $(".modal-body").html("<p class=text-danger>Network Error!</p>");
+              $(".modal-title").html("")
+              $(".modal-footerdiv").html("<button id=redirectf2>ok</button>");
+              $("#redirectf2").addClass("btn btn-primary");
+              $("#redirectf2").on("click", function () {
+                $("#modalDialog").toggle('hide');
+              });
+              $("#modalDialog").toggle('show');
+            }
           });
-          $("#modalDialog").toggle('show');
-        }
-      })
-  }
+      },
+      columnDefs: [
+        {
+          data: null,
+          defaultContent: '<div><button class="btn btn-sm btn-primary btnEdit mx-1">Edit</button><button class="btn btn-sm btn-danger btnRemove">Remove</button></div>',
+          targets: -1,
+        },
+      ]
+    });
+
+  }, []);
 
   return (
     <>
@@ -236,7 +188,7 @@ export default function FranchiseReport() {
         <table className="table nowrap w-100" id="tbl_franchise">
           <thead>
             <tr className='text-left'>
-              <th></th>
+              {/* <th></th> */}
               <th>ID</th>
               <th>Name</th>
               <th>Description</th>

@@ -15,6 +15,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'assets/third-party/apex-chart.css';
 
 
+//main-css
+import 'assets/css/main.css';
 
 
 // project import

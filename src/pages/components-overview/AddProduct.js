@@ -1,5 +1,6 @@
 import React from 'react';
 import secureLocalStorage from 'react-secure-storage';
+import $ from 'jquery';
 
 // material-ui
 import {
@@ -25,27 +26,26 @@ import AuthWrapper from 'pages/authentication/AuthWrapper';
 import url from 'routes/url';
 
 // ============================|| ADD - PRODUCT ||============================ //
-var imgreader;
+
 const AddProduct = () => {
     const [imageUrl, setImageUrl] = useState(null);
+    const [filedata, setFiledata] = useState("");
     const [currentTab, setCurrentTab] = useState("addproducts");
 	// const initialState = { src : "", profiledata: undefined };
 	// const [{ alt, src, profiledata }, setPreview] = React.useState(initialState);
 
     const handleFileUpload = (event) => {
         const file = event.target.files[0];
+        setFiledata(file);
         const reader = new FileReader();
-        console.log(reader,"reader");
+        reader.readAsDataURL(file);
+
+        console.log(reader)
 
         reader.onloadend = () => {
             setImageUrl(reader.result);
         };
-        reader.readAsDataURL(file);
-        imgreader = reader.result;
-
-        console.log(imgreader,"imgreader");
     };
-
 
     //Submit product details
     const AddNewProduct = () => {
@@ -55,38 +55,45 @@ const AddProduct = () => {
         var category = document.getElementById("category").value;
         var description = document.getElementById("description").value;
 
-        var data = {
-            name: productname,
-            price: costperunit,
-            category: category,
-            company:companyname,
-            description: description,
-            product_image:imgreader
-        }
+        var formData = new FormData();
+        formData.append("name", productname);
+        formData.append("price", costperunit);
+        formData.append("company", companyname);
+        formData.append("category", category);
+        formData.append("description", description);
+        formData.append("product_image", filedata);
 
+        console.log(filedata,product_image)
+
+        console.log(formData)
         if (productname != "" && costperunit != "" &&  description != "" && companyname != "" && category != "") {
         
-        axios.defaults.headers.common = {'Authorization': `Bearer ${secureLocalStorage.getItem('at_')}`}
+        axios.defaults.headers.common = {
+            'Authorization': `Bearer ${secureLocalStorage.getItem('at_')}`,
+            'Content-Type': 'multipart/form-data'
+        }
 
-        axios.post(url.addproduct, data )
+        axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
+
+        axios.post(url.addproduct, formData )
                 .then(() => {
                     $(".modal-body").html("<p class=text-danger>New product added</p>");
                     $(".modal-title").html("")
-                    $(".modal-footerdiv").html("<button id=redirectC>ok</button>");
-                    $("#redirectC").addClass("btn btn-primary");
-                    $("#redirectC").on("click", function () {
-                        $("#modalDialog").toggle('hide');
-                        //   setCurrentTab("viewinventory");
-                        window.location.reload();
-                        setCurrentTab("viewproducts");
+                    $(".modal-footerdiv").html("<button id=redirect11>ok</button>");
+                    $("#redirect11").addClass("btn btn-primary");
+                    $("#redirect11").on("click", function () {
+                      $("#modalDialog").toggle('hide');
+                    //   setCurrentTab("viewproducts");
+                      window.location.reload();
                     });
                     $("#modalDialog").toggle('show');
                 })
                 .catch(function (res) {
-                    if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
+                    console.log(res)
+                    // if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
                       if (res.response.status === 401) {
                         $(".modal-body").html("<p class=text-danger>" + res.response.status + " : Unauthorized access</p>");
-                        $(".modal-title").html("<h5 class=text-danger>Login Failed!</h5>")
+                        $(".modal-title").html("")
                         $(".modal-footerdiv").html("<button id=redirect1>ok</button>");
                         $("#redirect1").addClass("btn btn-primary");
                         $("#redirect1").on("click", function () {
@@ -94,12 +101,22 @@ const AddProduct = () => {
                         });
                         $("#modalDialog").toggle('show');
                       }
+                     else if (res.response.status === 400) {
+                        $(".modal-body").html("<p class=text-danger>Bad request found</p>");
+                        $(".modal-title").html("");
+                        $(".modal-footerdiv").html("<button id=redirects1>ok</button>");
+                        $("#redirects1").addClass("btn btn-primary");
+                        $("#redirects1").on("click", function () {
+                            $("#modalDialog").toggle('hide');
+                        });
+                        $("#modalDialog").toggle('show');
                     }
-                    else if (res.code !== '' && res.code === 'ERR_NETWORK' || res.code === 'ECONNABORTED') {
+                    // }
+                    else {
                       $(".modal-body").html("<p class=text-danger>Network Error!</p>");
                       $(".modal-title").html("")
-                      $(".modal-footerdiv").html("<button id=redirect2 class=btn-primary>ok</button>");
-                      $("#redirect2").addClass("btn btn-block");
+                      $(".modal-footerdiv").html("<button id=redirect2>ok</button>");
+                      $("#redirect2").addClass("btn btn-primary");
                       $("#redirect2").on("click", function () {
                         $("#modalDialog").toggle('hide');
                       });
@@ -283,7 +300,7 @@ const AddProduct = () => {
                                
                                 </Stack> */}
                                                 <Stack direction="row" alignItems="center" spacing={2}>
-                                                    <InputLabel htmlFor="image-signup">Upload image*</InputLabel>
+                                                    <InputLabel htmlFor="image-signup">Upload image</InputLabel>
                                                     <IconButton
                                                         color="primary"
                                                         aria-label="upload picture"

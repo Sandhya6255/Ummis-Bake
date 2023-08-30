@@ -22,7 +22,7 @@ import { openDrawer } from 'store/reducers/menu';
 
 const MainLayout = () => {
   const theme = useTheme();
-  const [loggedin,Setloggedin] = React.useState(true);
+  const [loggedin, Setloggedin] = React.useState(true);
   const matchDownLG = useMediaQuery(theme.breakpoints.down('lg'));
   const dispatch = useDispatch();
 
@@ -48,59 +48,55 @@ const MainLayout = () => {
 
   //Check user loggedin or not
   useEffect(() => {
-    var isloggedin = secureLocalStorage.getItem('ap_');
-    console.log(isloggedin,"welcomeeeeeeee")
-    if(isloggedin == false || isloggedin == null)
-    {
+    var isloggedin = secureLocalStorage.getItem('at_');
+    // console.log(isloggedin,"welcomeeeeeeee")
+    if (isloggedin == false || isloggedin == null) {
       Setloggedin(false);
     }
-    else
-    {
+    else {
       Setloggedin(true);
     }
   }, []);
 
-  React.useEffect(()=>
-  {
-    if(secureLocalStorage.getItem('at_') == null)
-    {
+  React.useEffect(() => {
+    // if (secureLocalStorage.getItem('at_') == null) {
       var refreshtoken = secureLocalStorage.getItem('rt_');
       axios.post(url.usertokenrefresh,{refresh:refreshtoken})
       .then(function (response) {
-        secureLocalStorage.setItem('at_',response.access)
+        secureLocalStorage.setItem('at_',response.data.access);
       })
-      .catch(function (res) {
-        if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
-          if (res.response.status === 401) {
-            $(".modal-body").html("<p class=text-danger>" + res.response.status + " : Unauthorized access</p>");
-            $(".modal-title").html("<h5 class=text-danger>Login Failed!</h5>")
-            $(".modal-footerdiv").html("<button id=redirect1>ok</button>");
-            $("#redirect1").addClass("btn btn-primary");
-            $("#redirect1").on("click", function () {
+        .catch(function (res) {
+          if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
+            if (res.response.status === 401) {
+              $(".modal-body").html("<p class=text-danger>" + res.response.status + " : Unauthorized access</p>");
+              $(".modal-title").html("<h5 class=text-danger>Login Failed!</h5>")
+              $(".modal-footerdiv").html("<button id=redirect1>ok</button>");
+              $("#redirect1").addClass("btn btn-primary");
+              $("#redirect1").on("click", function () {
+                $("#modalDialog").toggle('hide');
+              });
+              $("#modalDialog").toggle('show');
+            }
+          }
+          else if (res.code !== '' && res.code === 'ERR_NETWORK' || res.code === 'ECONNABORTED') {
+            $(".modal-body").html("<p class=text-danger>Network Error!</p>");
+            $(".modal-title").html("")
+            $(".modal-footerdiv").html("<button id=redirect2 class=btn-primary>ok</button>");
+            $("#redirect2").addClass("btn btn-block");
+            $("#redirect2").on("click", function () {
               $("#modalDialog").toggle('hide');
             });
             $("#modalDialog").toggle('show');
           }
-        }
-        else if (res.code !== '' && res.code === 'ERR_NETWORK' || res.code === 'ECONNABORTED') {
-          $(".modal-body").html("<p class=text-danger>Network Error!</p>");
-          $(".modal-title").html("")
-          $(".modal-footerdiv").html("<button id=redirect2 class=btn-primary>ok</button>");
-          $("#redirect2").addClass("btn btn-block");
-          $("#redirect2").on("click", function () {
-            $("#modalDialog").toggle('hide');
-          });
-          $("#modalDialog").toggle('show');
-        }
-      })
-    }
-  })
+        })
+    // }
+  },[1800000])
 
 
   return (
     <Box sx={{ display: 'flex', width: '100%' }}>
-      {loggedin?<Header open={open} handleDrawerToggle={handleDrawerToggle} />:null}
-      {loggedin?<Drawer open={open} handleDrawerToggle={handleDrawerToggle} />:null}
+      {loggedin ? <Header open={open} handleDrawerToggle={handleDrawerToggle} /> : null}
+      {loggedin ? <Drawer open={open} handleDrawerToggle={handleDrawerToggle} /> : null}
       <Box component="main" sx={{ width: '100%', flexGrow: 1, p: { xs: 2, sm: 3 } }}>
         <Toolbar />
         <Breadcrumbs navigation={navigation} title />

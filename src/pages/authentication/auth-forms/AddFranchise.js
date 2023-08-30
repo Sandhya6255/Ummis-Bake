@@ -1,6 +1,7 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 // import { Link as RouterLink } from 'react-router-dom';
+import $ from 'jquery';
 
 // material-ui
 import {
@@ -77,7 +78,6 @@ const AddFranchise = () => {
     var pin = document.getElementById("pin").value;
     var phonenumber = document.getElementById("phone").value;
 
-
     var data = {
       name: name,
       description: description,
@@ -100,22 +100,22 @@ const AddFranchise = () => {
     axios.post(url.addfranchise, data )
         .then(() => {
           $(".modal-body").html("<p class=text-danger>New franchise added</p>");
-          $(".modal-title").html("")
-          $(".modal-footerdiv").html("<button id=redirectC>ok</button>");
-          $("#redirectC").addClass("btn btn-primary");
-          $("#redirectC").on("click", function () {
-              // $("#modalDialog").toggle('hide');
-              //   setCurrentTab("viewinventory");
+          $(".modal-title").html("");
+          $(".modal-footerdiv").html("<button id=redirectD1>ok</button>");
+          $("#redirectD1").addClass("btn btn-primary");
+          $("#redirectD1").on("click", function () {
+              $("#modalDialog").toggle('hide');
+                // setCurrentTab("viewinventory");
               window.location.reload();
-              setCurrentTab("viewfranchise");
           });
           $("#modalDialog").toggle('show');
         })
         .catch(function (res) {
-          if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
+          console.log(res);
+          // if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
             if (res.response.status === 401) {
               $(".modal-body").html("<p class=text-danger>" + res.response.status + " : Unauthorized access</p>");
-              $(".modal-title").html("<h5 class=text-danger>Login Failed!</h5>")
+              $(".modal-title").html("")
               $(".modal-footerdiv").html("<button id=redirect1>ok</button>");
               $("#redirect1").addClass("btn btn-primary");
               $("#redirect1").on("click", function () {
@@ -123,9 +123,9 @@ const AddFranchise = () => {
               });
               $("#modalDialog").toggle('show');
             }
-            if (res.response.status === 400) {
+            else if (res.response.status === 400) {
               $(".modal-body").html("<p class=text-danger>Bad request found</p>");
-              $(".modal-title").html("<h5 class=text-danger>Login Failed!</h5>")
+              $(".modal-title").html("");
               $(".modal-footerdiv").html("<button id=redirect1>ok</button>");
               $("#redirect1").addClass("btn btn-primary");
               $("#redirect1").on("click", function () {
@@ -133,8 +133,8 @@ const AddFranchise = () => {
               });
               $("#modalDialog").toggle('show');
             }
-          }
-          else if (res.code !== '' && res.code === 'ERR_NETWORK' || res.code === 'ECONNABORTED') {
+          // }
+          else  {
             $(".modal-body").html("<p class=text-danger>Network Error!</p>");
             $(".modal-title").html("")
             $(".modal-footerdiv").html("<button id=redirect2 class=btn-primary>ok</button>");
@@ -144,7 +144,7 @@ const AddFranchise = () => {
             });
             $("#modalDialog").toggle('show');
           }
-        })
+        });
     }
   }
 

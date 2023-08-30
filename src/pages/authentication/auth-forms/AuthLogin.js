@@ -1,22 +1,22 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+// import { Link as RouterLink } from 'react-router-dom';
 import axios from 'axios';
 import $ from 'jquery';
 
 // material-ui
 import {
   Button,
-  Checkbox,
-  FormControlLabel,
+  // Checkbox,
+  // FormControlLabel,
   FormHelperText,
   Grid,
-  Link,
+  // Link,
   IconButton,
   InputAdornment,
   InputLabel,
   OutlinedInput,
   Stack,
-  Typography
+  // Typography
 } from '@mui/material';
 
 // third party
@@ -35,7 +35,11 @@ import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const AuthLogin = () => {
-  const [checked, setChecked] = React.useState(false);
+  // const [checked, setChecked] = React.useState(false);
+  React.useEffect(()=>
+  {
+    secureLocalStorage.clear();
+  },[]);
 
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => {
@@ -79,10 +83,10 @@ const AuthLogin = () => {
           }
         })
         .catch(function (res) {
-          if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
+          // if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
             if (res.response.status === 401) {
               $(".modal-body").html("<p class=text-danger>" + res.response.status + " : Unauthorized access</p>");
-              $(".modal-title").html("<h5 class=text-danger>Login Failed!</h5>")
+              $(".modal-title").html("")
               $(".modal-footerdiv").html("<button id=redirect1>ok</button>");
               $("#redirect1").addClass("btn btn-primary");
               $("#redirect1").on("click", function () {
@@ -90,12 +94,22 @@ const AuthLogin = () => {
               });
               $("#modalDialog").toggle('show');
             }
-          }
-          else if (res.code !== '' && res.code === 'ERR_NETWORK' || res.code === 'ECONNABORTED') {
+            else if (res.response.status === 400) {
+              $(".modal-body").html("<p class=text-danger>Bad request found</p>");
+              $(".modal-title").html("");
+              $(".modal-footerdiv").html("<button id=redirecta1>ok</button>");
+              $("#redirecta1").addClass("btn btn-primary");
+              $("#redirecta1").on("click", function () {
+                $("#modalDialog").toggle('hide');
+              });
+              $("#modalDialog").toggle('show');
+            }
+          // }
+          else  {
             $(".modal-body").html("<p class=text-danger>Network Error!</p>");
             $(".modal-title").html("")
-            $(".modal-footerdiv").html("<button id=redirect2 class=btn-primary>ok</button>");
-            $("#redirect2").addClass("btn btn-block");
+            $(".modal-footerdiv").html("<button id=redirect2>ok</button>");
+            $("#redirect2").addClass("btn btn-primary");
             $("#redirect2").on("click", function () {
               $("#modalDialog").toggle('hide');
             });
@@ -116,7 +130,7 @@ const AuthLogin = () => {
         email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
         password: Yup.string().max(255).required('Password is required')
       })}
-      onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+      onSubmit={async ({ setErrors, setStatus, setSubmitting }) => {
         try {
           setStatus({ success: false });
           setSubmitting(false);
@@ -187,7 +201,7 @@ const AuthLogin = () => {
               </Stack>
             </Grid>
 
-            <Grid item xs={12} sx={{ mt: -1 }}>
+            {/* <Grid item xs={12} sx={{ mt: -1 }}>
               <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
                 <FormControlLabel
                   control={
@@ -205,7 +219,7 @@ const AuthLogin = () => {
                   Forgot Password?
                 </Link>
               </Stack>
-            </Grid>
+            </Grid> */}
             {errors.submit && (
               <Grid item xs={12}>
                 <FormHelperText error>{errors.submit}</FormHelperText>

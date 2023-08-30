@@ -3,7 +3,7 @@ import { lazy } from 'react';
 // project import
 import Loadable from 'components/Loadable';
 import MainLayout from 'layout/MainLayout';
-// import AuthLogin from 'pages/authentication/auth-forms/AuthLogin';
+import Login from 'pages/authentication/Login';
 
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
@@ -12,18 +12,23 @@ const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
 const AddFranchise = Loadable(lazy(() => import('pages/authentication/auth-forms/AddFranchise')));
 const AddProduct = Loadable(lazy(() => import('pages/components-overview/AddProduct')));
 const Productreport = Loadable(lazy(() => import('pages/components-overview/ProductReport')));
-const Salesreport = Loadable(lazy(() => import('pages/components-overview/SalesReport')));
-const Customer_report = Loadable(lazy(() => import('pages/components-overview/CustomerReport')));
-const AddSales = Loadable(lazy(() => import('pages/components-overview/AddSales')));
 const AddInventory = Loadable(lazy(() => import('pages/components-overview/AddInventory')));
+const EditInventory = Loadable(lazy(() => import('pages/components-overview/EditInventory')));
 const ChangePassword = Loadable(lazy(() => import('pages/authentication/auth-forms/ChangePassword')));
 const Edit_Product = Loadable(lazy(() => import('pages/components-overview/EditProduct')));
+const Edit_Franchise = Loadable(lazy(() => import('pages/authentication/auth-forms/EditFranchise')));
+
+
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
   path: '/',
   element: <MainLayout />,
   children: [
+    {
+      path: '/',
+      element: <Login />
+    },
     {
       path: '/',
       element: <DashboardDefault />
@@ -46,32 +51,28 @@ const MainRoutes = {
       element: <AddFranchise />
     },
     {
+      path: 'editfranchise',
+      element: <Edit_Franchise />
+    },
+    {
       path: 'addproduct',
       element: <AddProduct />
     },
     {
-      path: 'addinventory',
-      element: <AddInventory />
+      path: 'editproduct',
+      element: <Edit_Product />
     },
     {
       path: 'productreport',
       element: <Productreport />
     },
     {
-      path: 'addsales',
-      element: <AddSales />
+      path: 'addinventory',
+      element: <AddInventory />
     },
     {
-      path: 'salesreport',
-      element: <Salesreport />
-    },
-    {
-      path: 'customer_report',
-      element: <Customer_report />
-    },
-    {
-      path: 'editproduct',
-      element: <Edit_Product />
+      path: 'editinventory',
+      element: <EditInventory />
     }
   ]
 };

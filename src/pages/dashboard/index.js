@@ -1,7 +1,9 @@
 
 import React from 'react';
-// import { useState } from 'react';
+import { useState } from 'react';
 import secureLocalStorage from 'react-secure-storage';
+import $ from 'jquery';
+// import { Modal, Button } from "react-bootstrap";
 
 // material-ui
 import {
@@ -30,6 +32,7 @@ import {
 // import MainCard from 'components/MainCard';
 import AnalyticEcommerce from 'components/cards/statistics/AnalyticEcommerce';
 import url from 'routes/url';
+// import Sample from 'pages/authentication/auth-forms/Sample';
 // assets
 // import { GiftOutlined, MessageOutlined, SettingOutlined } from '@ant-design/icons';
 // import avatar1 from 'assets/images/users/avatar-1.png';
@@ -73,93 +76,112 @@ import url from 'routes/url';
 
 // ==============================|| DASHBOARD - DEFAULT ||============================== //
 
+// const icons = {
+//   DeleteOutlined
+// }
 
 const DashboardDefault = () => {
-  // const [value, setValue] = useState('today');
-  // const [slot, setSlot] = useState('week');
-  // const [loggedin,Setloggedin] = React.useState(true);
+  const [salesCount, setsalesCount] = useState("");
+  const [userCount, setuserCount] = useState("");
+  const [productCount, setproductCount] = useState("");
+  const [customerCount, setcustomerCount] = useState("");
 
-  // var isloggedin = secureLocalStorage.getItem('ap_');
-  // if(isloggedin == false || isloggedin == null)
-  // {
-  //   Setloggedin(false);
-  // }
-  // else{
-  //   Setloggedin(true);
-  // }
+  axios.defaults.headers.common = { 'Authorization': `Bearer ${secureLocalStorage.getItem('at_')}` }
 
-  axios.defaults.headers.common = {'Authorization': `Bearer ${secureLocalStorage.getItem('at_')}`}
-
-  React.useEffect(()=>
-  {
-    axios.post(url.dashboardcount,)
-    .then(function (response) {
-      console.log(response,"dash res");
-    })
-    .catch(function (res) {
-      if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
-        if (res.response.status === 401) {
-          $(".modal-body").html("<p class=text-danger>" + res.response.status + " : Unauthorized access</p>");
-          $(".modal-title").html("<h5 class=text-danger>Login Failed!</h5>")
-          $(".modal-footerdiv").html("<button id=redirect1>ok</button>");
-          $("#redirect1").addClass("btn btn-primary");
-          $("#redirect1").on("click", function () {
+  React.useEffect(() => {
+    axios.get(url.dashboardcount)
+      .then(function (response) {
+        setsalesCount(response.data.sales_count.toString());
+        setuserCount(response.data.user_count.toString());
+        setproductCount(response.data.product_count.toString());
+        setcustomerCount(response.data.customer_count.toString());
+      })
+      .catch(function (res) {
+        // if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
+          if (res.response.status === 401) {
+            $(".modal-body").html("<p class=text-danger>" + res.response.status + " : Unauthorized access</p>");
+            $(".modal-title").html("")
+            $(".modal-footerdiv").html("<button id=redirect1>ok</button>");
+            $("#redirect1").addClass("btn btn-primary");
+            $("#redirect1").on("click", function () {
+              $("#modalDialog").toggle('hide');
+            });
+            $("#modalDialog").toggle('show');
+          }
+          else if (res.response.status === 400) {
+            $(".modal-body").html("<p class=text-danger>Bad request found</p>");
+            $(".modal-title").html("");
+            $(".modal-footerdiv").html("<button id=redirectn1>ok</button>");
+            $("#redirectn1").addClass("btn btn-primary");
+            $("#redirectn1").on("click", function () {
+              $("#modalDialog").toggle('hide');
+            });
+            $("#modalDialog").toggle('show');
+          }
+        // }
+        else  {
+          $(".modal-body").html("<p class=text-danger>Network Error!</p>");
+          $(".modal-title").html("")
+          $(".modal-footerdiv").html("<button id=redirectn2>ok</button>");
+          $("#redirectn2").addClass("btn btn-primary");
+          $("#redirectn2").on("click", function () {
             $("#modalDialog").toggle('hide');
           });
           $("#modalDialog").toggle('show');
         }
-      }
-      else if (res.code !== '' && res.code === 'ERR_NETWORK' || res.code === 'ECONNABORTED') {
-        $(".modal-body").html("<p class=text-danger>Network Error!</p>");
-        $(".modal-title").html("")
-        $(".modal-footerdiv").html("<button id=redirect2 class=btn-primary>ok</button>");
-        $("#redirect2").addClass("btn btn-block");
-        $("#redirect2").on("click", function () {
-          $("#modalDialog").toggle('hide');
-        });
-        $("#modalDialog").toggle('show');
-      }
-    })
-  },[])
+      })
+  }, [])
   return (
     <>
-    {/* {loggedin? */}
-    <Grid container rowSpacing={4.5} columnSpacing={2.75}>
-      {/* row 1 */}
-      <Grid item xs={12} sx={{ mb: -2.25 }}>
-        <Typography variant="h5">Dashboard</Typography>
-      </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={3}>
+      {/* {loggedin? */}
+      <Grid container rowSpacing={4.5} columnSpacing={2.75}>
+        {/* row 1 */}
+        <Grid item xs={12} sx={{ mb: -2.25 }}>
+          <Typography variant="h5">Dashboard</Typography>
+        </Grid>
+        {/* <Grid item xs={12} sm={6} md={4} lg={3}>
         <AnalyticEcommerce title="Total Page Views" count={""} 
-        // percentage={59.3} extra="35,000" 
+        percentage={59.3} extra="35,000" 
         />
-      </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Total Users" count={""}
-        //  percentage={70.5} extra="8,900" 
-         />
-      </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Total Order" count={""}
-        //  percentage={27.4} 
-        //  isLoss 
-         color="warning" 
-        //  extra="1,943" 
-         />
-      </Grid>
-      <Grid item xs={12} sm={6} md={4} lg={3}>
-        <AnalyticEcommerce title="Total Sales" count="" 
-        // percentage={27.4} 
-        // isLoss 
-        color="warning" 
-        // extra="$20,395"
-         />
-      </Grid>
+      </Grid> */}
+        <Grid item xs={12} sm={6} md={4} lg={3}>
+          <AnalyticEcommerce title="Total Users" count={userCount}
+          //  percentage={70.5} extra="8,900" 
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4} lg={3}>
+          <AnalyticEcommerce title="Total Products" count={productCount}
+            //  percentage={27.4} 
+            //  isLoss 
+            color="warning"
+          //  extra="1,943" 
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4} lg={3}>
+          <AnalyticEcommerce title="Total Sales" count={salesCount}
+            // percentage={27.4} 
+            // isLoss 
+            color="warning"
+          // extra="$20,395"
+          />
+        </Grid>
 
-      <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
+        <Grid item xs={12} sm={6} md={4} lg={3}>
+          <AnalyticEcommerce title="Total customers" count={customerCount}
+          // percentage={59.3} 
+          // extra="35,000" 
+          />
+        </Grid>
 
-      {/* row 2 */}
-      {/* <Grid item xs={12} md={7} lg={8}>
+
+        {/* <Sample /> */}
+
+        <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
+
+
+{/* <Sample /> */}
+        {/* row 2 */}
+        {/* <Grid item xs={12} md={7} lg={8}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Unique Visitor</Typography>
@@ -211,8 +233,8 @@ const DashboardDefault = () => {
         </MainCard>
       </Grid> */}
 
-      {/* row 3 */}
-      {/* <Grid item xs={12} md={7} lg={8}>
+        {/* row 3 */}
+        {/* <Grid item xs={12} md={7} lg={8}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Recent Orders</Typography>
@@ -222,8 +244,8 @@ const DashboardDefault = () => {
         <MainCard sx={{ mt: 2 }} content={false}>
           <OrdersTable />
         </MainCard>
-      </Grid>
-      <Grid item xs={12} md={5} lg={4}>
+      </Grid> */}
+        {/* <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Analytics Report</Typography>
@@ -249,8 +271,8 @@ const DashboardDefault = () => {
         </MainCard>
       </Grid> */}
 
-      {/* row 4 */}
-      {/* <Grid item xs={12} md={7} lg={8}>
+        {/* row 4 */}
+        {/* <Grid item xs={12} md={7} lg={8}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Sales Report</Typography>
@@ -282,7 +304,7 @@ const DashboardDefault = () => {
           <SalesColumnChart />
         </MainCard>
       </Grid> */}
-      {/* <Grid item xs={12} md={5} lg={4}>
+        {/* <Grid item xs={12} md={5} lg={4}>
         <Grid container alignItems="center" justifyContent="space-between">
           <Grid item>
             <Typography variant="h5">Transaction History</Typography>
@@ -401,8 +423,8 @@ const DashboardDefault = () => {
           </Stack>
         </MainCard>
       </Grid> */}
-    </Grid>
-   
+      </Grid>
+
     </>
   );
 };
