@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import secureLocalStorage from 'react-secure-storage';
+import $ from 'jquery';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -59,7 +60,7 @@ const MainLayout = () => {
   }, []);
 
   React.useEffect(() => {
-    // if (secureLocalStorage.getItem('at_') == null) {
+    if (secureLocalStorage.getItem('rt_') != null || secureLocalStorage.getItem('rt_')) {
       var refreshtoken = secureLocalStorage.getItem('rt_');
       axios.post(url.usertokenrefresh,{refresh:refreshtoken})
       .then(function (response) {
@@ -77,19 +78,29 @@ const MainLayout = () => {
               });
               $("#modalDialog").toggle('show');
             }
+            else if (res.response.status === 400) {
+              $(".modal-body").html("<p class=text-danger>Bad request found</p>");
+              $(".modal-title").html("")
+              $(".modal-footerdiv").html("<button id=redirectr1>ok</button>");
+              $("#redirectr1").addClass("btn btn-primary");
+              $("#redirectr1").on("click", function () {
+                $("#modalDialog").toggle('hide');
+              });
+              $("#modalDialog").toggle('show');
+            }
           }
-          else if (res.code !== '' && res.code === 'ERR_NETWORK' || res.code === 'ECONNABORTED') {
+          else {
             $(".modal-body").html("<p class=text-danger>Network Error!</p>");
             $(".modal-title").html("")
-            $(".modal-footerdiv").html("<button id=redirect2 class=btn-primary>ok</button>");
-            $("#redirect2").addClass("btn btn-block");
+            $(".modal-footerdiv").html("<button id=redirect2>ok</button>");
+            $("#redirect2").addClass("btn btn-primary");
             $("#redirect2").on("click", function () {
               $("#modalDialog").toggle('hide');
             });
             $("#modalDialog").toggle('show');
           }
         })
-    // }
+    }
   },[1800000])
 
 
