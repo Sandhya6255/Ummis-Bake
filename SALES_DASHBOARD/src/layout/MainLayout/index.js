@@ -52,7 +52,7 @@ const MainLayout = () => {
   useEffect(() => {
     var isloggedin = secureLocalStorage.getItem('at_');
     // console.log(isloggedin,"welcomeeeeeeee")
-    if (isloggedin == false || isloggedin == null) {
+    if (isloggedin == false || isloggedin == null || isloggedin == "") {
       Setloggedin(false);
     }
     else {
@@ -63,10 +63,10 @@ const MainLayout = () => {
   React.useEffect(() => {
     if (secureLocalStorage.getItem('rt_') != null || secureLocalStorage.getItem('rt_')) {
       var refreshtoken = secureLocalStorage.getItem('rt_');
-      axios.post(url.usertokenrefresh,{refresh:refreshtoken})
-      .then(function (response) {
-        secureLocalStorage.setItem('at_',response.data.access);
-      })
+      axios.post(url.usertokenrefresh, { refresh: refreshtoken })
+        .then(function (response) {
+          secureLocalStorage.setItem('at_', response.data.access);
+        })
         .catch(function (res) {
           if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
             if (res.response.status === 401) {
@@ -102,29 +102,29 @@ const MainLayout = () => {
           }
         })
     }
-  },[1800000])
+  }, [1800000])
 
 
   return (
     <>
-    {loggedin ?
-      <Box sx={{ display: 'flex', width: '100%' }}>
-        {loggedin ? <Header open={open} handleDrawerToggle={handleDrawerToggle} /> : null}
-        {loggedin ? <Drawer open={open} handleDrawerToggle={handleDrawerToggle} /> : null}
-        <Box component="main" sx={{ width: '100%', flexGrow: 1, p: { xs: 2, sm: 3 } }}>
-          <Toolbar />
-          <Breadcrumbs navigation={navigation} title />
-          {loggedin ? <Outlet /> : <Login />}
+      {loggedin ?
+        <Box sx={{ display: 'flex', width: '100%' }}>
+          {loggedin ? <Header open={open} handleDrawerToggle={handleDrawerToggle} /> : null}
+          {loggedin ? <Drawer open={open} handleDrawerToggle={handleDrawerToggle} /> : null}
+          <Box component="main" sx={{ width: '100%', flexGrow: 1, p: { xs: 2, sm: 3 } }}>
+            <Toolbar />
+            <Breadcrumbs navigation={navigation} title />
+            {loggedin ? <Outlet /> : <Login />}
+          </Box>
         </Box>
-      </Box>
-      :
-      <Box sx={{ display: 'flex', width: '100%' }}>
-        <Box component="main" sx={{ width: '100%', flexGrow: 1, p: { xs: 2, sm: 3 } }}>
-          <Login />
+        :
+        <Box sx={{ display: 'flex', width: '100%' }}>
+          <Box component="main" sx={{ width: '100%', flexGrow: 1, p: { xs: 2, sm: 3 } }}>
+            <Login />
+          </Box>
         </Box>
-      </Box>
-    }
-  </>
+      }
+    </>
   );
 };
 

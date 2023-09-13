@@ -2,6 +2,7 @@ import React from 'react';
 // import { Link as RouterLink } from 'react-router-dom';
 import axios from 'axios';
 import $ from 'jquery';
+import secureLocalStorage from 'react-secure-storage';
 
 // material-ui
 import {
@@ -23,7 +24,6 @@ import {
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import jwt_decode from "jwt-decode";
-import secureLocalStorage from 'react-secure-storage';
 
 // project import
 import AnimateButton from 'components/@extended/AnimateButton';
@@ -36,9 +36,17 @@ import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
 const AuthLogin = () => {
   // const [checked, setChecked] = React.useState(false);
+
   React.useEffect(()=>
   {
     // secureLocalStorage.clear();
+    // if(secureLocalStorage.getItem("at_") == null)
+    // {
+    //   window.location.href = "/login";
+    // }
+    // else{
+    //   window.location.href = "/sales";
+    // }
   },[]);
 
   const [showPassword, setShowPassword] = React.useState(false);
@@ -63,24 +71,25 @@ const AuthLogin = () => {
     if (username != "" && password != "") {
       axios.post(url.login, data)
         .then((res) => {
-          if (res.status === 200) {
+          // if (res.status === 200) {
             secureLocalStorage.setItem('rt_', res.data.refresh);
             secureLocalStorage.setItem('at_', res.data.access);
             var token = res.data.refresh;
             var decoded = jwt_decode(token);
-            console.log(decoded)
             secureLocalStorage.setItem('ex_', decoded.exp);
             secureLocalStorage.setItem('ui_', decoded.user_id);
             secureLocalStorage.setItem('ap_', decoded.admin);
-            if (decoded.admin == true) {
-              secureLocalStorage.setItem('un_', "Admin");
-              window.location.href = "/dashboard/default";
-            }
-            else {
-              secureLocalStorage.setItem('un_', "Franchise");
-              window.location.href = "/addsales";
-            }
-          }
+            // if (decoded.admin == true) {
+            //   secureLocalStorage.setItem('un_', "Admin");
+            //   window.location.href = "/dashboard";
+            // }
+            // else {
+            //   secureLocalStorage.setItem('un_', "Franchise");
+            //   window.location.href = "/sales";
+            // }
+            secureLocalStorage.setItem('un_', "Franchise");
+            window.location.href = "/sales";
+          // }
         })
         .catch(function (res) {
           // if (res.code !== '' && res.code === 'ERR_BAD_REQUEST') {
@@ -94,12 +103,12 @@ const AuthLogin = () => {
               });
               $("#modalDialog").toggle('show');
             }
-            else if (res.response.status === 400) {
+            else  if (res.response.status === 400) {
               $(".modal-body").html("<p class=text-danger>Bad request found</p>");
-              $(".modal-title").html("");
-              $(".modal-footerdiv").html("<button id=redirecta1>ok</button>");
-              $("#redirecta1").addClass("btn btn-primary");
-              $("#redirecta1").on("click", function () {
+              $(".modal-title").html("")
+              $(".modal-footerdiv").html("<button id=redirects1>ok</button>");
+              $("#redirects1").addClass("btn btn-primary");
+              $("#redirects1").on("click", function () {
                 $("#modalDialog").toggle('hide');
               });
               $("#modalDialog").toggle('show');
@@ -108,9 +117,9 @@ const AuthLogin = () => {
           else  {
             $(".modal-body").html("<p class=text-danger>Network Error!</p>");
             $(".modal-title").html("")
-            $(".modal-footerdiv").html("<button id=redirect2>ok</button>");
-            $("#redirect2").addClass("btn btn-primary");
-            $("#redirect2").on("click", function () {
+            $(".modal-footerdiv").html("<button id=redirect22>ok</button>");
+            $("#redirect22").addClass("btn btn-primary");
+            $("#redirect22").on("click", function () {
               $("#modalDialog").toggle('hide');
             });
             $("#modalDialog").toggle('show');
@@ -118,7 +127,6 @@ const AuthLogin = () => {
         })
     }
   }
-
   return (
     <Formik
       initialValues={{
@@ -130,7 +138,7 @@ const AuthLogin = () => {
         email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
         password: Yup.string().max(255).required('Password is required')
       })}
-      onSubmit={async ({ setErrors, setStatus, setSubmitting }) => {
+      onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
           setStatus({ success: false });
           setSubmitting(false);
